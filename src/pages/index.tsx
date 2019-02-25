@@ -4,7 +4,7 @@ import "../styles/layout.css"
 import SEO from "../components/seo"
 import { TimeHeader } from "../components/timeHeader";
 
-import { School, Schedule, Period } from "../@types/school";
+import { School, Schedule, Period, Time } from "../@types/school";
 import { PeriodSummary } from "../components/periodSummary";
 import * as moment from "moment-timezone";
 import { Centered } from "../styles";
@@ -87,9 +87,9 @@ export default class IndexPage extends React.Component<{}, IndexState> {
 
       if (typeof checkClass === 'undefined') { continue } // Thanks async for being wierd.
 
-      let start = moment().hour(checkClass.startTime.hours).minute(checkClass.startTime.minutes)
-      let end = moment().hour(checkClass.endTime.hours).minute(checkClass.endTime.minutes)
-      if (this.state.currentTime.isSameOrBefore(end) && this.state.currentTime.isSameOrAfter(start)) {
+      let start = this.convertTimeObjectToMoment(checkClass.startTime)
+      let end = this.convertTimeObjectToMoment(checkClass.endTime)
+
         if (i + 1 < this.state.currentSchedule.classes.length) { return [this.state.currentSchedule.classes[i], this.state.currentSchedule.classes[i + 1]] }
         else { return [this.state.currentSchedule.classes[i], null] }
       }
@@ -102,10 +102,13 @@ export default class IndexPage extends React.Component<{}, IndexState> {
   getTimeTillEnd = () => {
     if (!this.state.currentPeriod) { return null }
 
-    let endTime = moment().hour(this.state.currentPeriod.endTime.hours).minute(this.state.currentPeriod.endTime.minutes)
+    let endTime = this.convertTimeObjectToMoment(this.state.currentPeriod.endTime)
     return moment.duration(endTime.diff(this.state.currentTime))
   }
 
+convertTimeObjectToMoment = (timeObject: Time) => {
+  return moment().hour(timeObject.hours).minute(timeObject.minutes)
+}
   render () {
     return (
       <div>
