@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import './App.css';
 import Main from './components/Main';
 import Settings from './components/Settings';
+import Schedule from './components/Schedule';
 
 class App extends Component {
 
@@ -135,6 +136,17 @@ class App extends Component {
         ]
     }
     ];
+
+
+    mySchedule = ( props ) => {
+        return (
+          <Schedule 
+            schools={this.schools}
+            {...props}
+          />
+        );
+      }
+
       mainApp = ( props ) => {
         return (
           <Main 
@@ -149,7 +161,7 @@ class App extends Component {
             <Router>
                 <div>
                     <Route exact path="/" render={this.mainApp} />
-                    {/* {/* <Route path="/about" component={About} /> */}
+                    <Route path="/schedule" render={this.mySchedule} />
                     <Route path="/settings" component={Settings} />
                 </div>
             </Router>

@@ -25,7 +25,7 @@ class Schedule extends Component {
         return (
             <table id="scheduleTable" className="centeredInline topSpace">
                 <tbody>
-                    {this.props.classes.map( (classPeriod) => {
+                    {this.props.schools.map( (classPeriod) => {
                         return(<tr>
                             <td>{classPeriod.name}</td>
                             <td>{this.getFormattedTimeStringFromObject(classPeriod.startTime) + " - " + this.getFormattedTimeStringFromObject(classPeriod.endTime)}</td>
