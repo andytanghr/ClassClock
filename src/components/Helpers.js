@@ -142,6 +142,16 @@ class Helpers {
 
 
     /**
+     *  this checks to see if the currentScheduleIndex is valid (greater than -1), indicating that there is a schedule for the day
+     *
+     * @returns true if there is no schedule that applies to today, false if there is
+     */
+    static isNoSchoolDay = (currentScheduleIndex) => {
+        return currentScheduleIndex <= -1;
+        //might later want to add a check to make sure that currentScheduleIndex is not greater than the number of schedules
+    }
+
+    /**
      * this determines the index of the schedule that applies to today (if any)
      *
      * @returns an index for looking up the current schedule, or -1 if there is no school today
