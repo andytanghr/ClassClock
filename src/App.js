@@ -4,180 +4,190 @@ import './App.css';
 
 class App extends Component {
 
-    let DAY_OFF_FLAG = "day off"
-    let OUTSIDE_SCHOOL_HOURS_FLAG = "outside school hours"
-    let SCHOOL_IN_CLASS_OUT_FLAG = "school is in session, but class is not"
-    let CLASS_IN_SESSION_FLAG = "class is in session"
+    // constructor() {
+    //     super();
+        
+    //   }
 
-    let FLASH_SUCCESS = "SUCCESS"
-    let FLASH_INFO = "INFO"
-    let FLASH_WARN = "WARNING"
-    let FLASH_DANGER = "DANGER"
+    DAY_OFF_FLAG = "day off";
+    OUTSIDE_SCHOOL_HOURS_FLAG = "outside school hours";
+    SCHOOL_IN_CLASS_OUT_FLAG = "school is in session, but class is not";
+    CLASS_IN_SESSION_FLAG = "class is in session"
+  
+    FLASH_SUCCESS = "SUCCESS"
+    FLASH_INFO = "INFO"
+    FLASH_WARN = "WARNING"
+    FLASH_DANGER = "DANGER"
+  
+    currentDate;
+  
+    currentClassPeriodIndex = -1;
+      //nextClassPeriodIndex
+  
+    currentScheduleIndex = -1;
+    selectedSchoolIndex = 0;
+  
+  
+    use24HourTime = this.getLocalStorageBoolean("use24HourTime", false);
 
-    var currentDate;
-
-    var currentClassPeriodIndex = -1;
-    //nextClassPeriodIndex
-
-    var currentScheduleIndex = -1;
-    var selectedSchoolIndex = 0;
-
-
-    var use24HourTime = getLocalStorageBoolean("use24HourTime", false);
 
 
 
-    var schools = [
-            {
-            fullName: "Lake Oswego High School",
-            shortName: "LOHS",
-            passingPeriodName: "Passing Period", //the name to use for time gaps in the schedule between classes
-            //order is as is on the school website, although it doesnt matter.
-            schedules: [
-                {
-                    name: "Mon/Fri (Regular)",
-                    days: [1, 5],
-                    classes: [
-                        {
-                            name: "1st Period",
-                            startTime: {hours: 8, minutes:25},
-                            endTime: {hours: 9, minutes:55}
-                        },
-                        {
-                            name: "TSCT",
-                            startTime: {hours: 9, minutes:55},
-                            endTime: {hours: 10, minutes:10}
-                        },
-                        {
-                            name: "2nd Period",
-                            startTime: {hours: 10, minutes:15},
-                            endTime: {hours: 11, minutes:45}
-                        },
-                        {
-                            name: "Lunch",
-                            startTime: {hours: 11, minutes:45},
-                            endTime: {hours: 12, minutes:20}
-                        },
-                        {
-                            name: "3rd Period",
-                            startTime: {hours: 12, minutes:25},
-                            endTime: {hours: 13, minutes:55}
-                        },
-                        {
-                            name: "4th Period",
-                            startTime: {hours: 14, minutes:00},
-                            endTime: {hours: 15, minutes:30}
-                        }
-                    ]
-                },
-                {
-                    name: "Tues/Wed (Support Seminar)",
-                    days: [2, 3],
-                    classes: [
-                        {
-                            name: "1st Period",
-                            startTime: {hours: 8, minutes:25},
-                            endTime: {hours: 9, minutes:47}
-                        },
-                        {
-                            name: "TSCT",
-                            startTime: {hours: 9, minutes:47},
-                            endTime: {hours: 9, minutes:57}
-                        },
-                        {
-                            name: "Support Seminar",
-                            startTime: {hours: 10, minutes:02},
-                            endTime: {hours: 10, minutes:34}
-                        },
-                        {
-                            name: "2nd Period",
-                            startTime: {hours: 10, minutes:39},
-                            endTime: {hours: 12, minutes:01}
-                        },
-                        {
-                            name: "Lunch",
-                            startTime: {hours: 12, minutes:01},
-                            endTime: {hours: 12, minutes:36}
-                        },
-                        {
-                            name: "3rd Period",
-                            startTime: {hours: 12, minutes:41},
-                            endTime: {hours: 14, minutes:03}
-                        },
-                        {
-                            name: "4th Period",
-                            startTime: {hours: 14, minutes:8},
-                            endTime: {hours: 15, minutes:30}
-                        }
-                    ],
-                },
-                {
-                    name: "Thursday (Early Release)",
-                    days: [4],
-                    classes: [
-                        {
-                            name: "1st Period",
-                            startTime: {hours: 8, minutes:25},
-                            endTime: {hours: 9, minutes:50}
-                        },
-                        {
-                            name: "TSCT",
-                            startTime: {hours: 9, minutes:50},
-                            endTime: {hours: 10, minutes:00}
-                        },
-                        {
-                            name: "2nd Period",
-                            startTime: {hours: 10, minutes:05},
-                            endTime: {hours: 11, minutes:30}
-                        },
-                        {
-                            name: "Lunch",
-                            startTime: {hours: 11, minutes:30},
-                            endTime: {hours: 12, minutes:05}
-                        },
-                        {
-                            name: "3rd Period",
-                            startTime: {hours: 12, minutes:10},
-                            endTime: {hours: 13, minutes:35}
-                        },
-                        {
-                            name: "4th Period",
-                            startTime: {hours: 13, minutes:40},
-                            endTime: {hours: 15, minutes:05}
-                        }
-                    ]
-                }
-            ]
-        }
-    ];
+    schools = [
+          {
+          fullName: "Lake Oswego High School",
+          shortName: "LOHS",
+          passingPeriodName: "Passing Period", //the name to use for time gaps in the schedule between classes
+          //order is as is on the school website, although it doesnt matter.
+          schedules: [
+              {
+                  name: "Mon/Fri (Regular)",
+                  days: [1, 5],
+                  classes: [
+                      {
+                          name: "1st Period",
+                          startTime: {hours: 8, minutes:25},
+                          endTime: {hours: 9, minutes:55}
+                      },
+                      {
+                          name: "TSCT",
+                          startTime: {hours: 9, minutes:55},
+                          endTime: {hours: 10, minutes:10}
+                      },
+                      {
+                          name: "2nd Period",
+                          startTime: {hours: 10, minutes:15},
+                          endTime: {hours: 11, minutes:45}
+                      },
+                      {
+                          name: "Lunch",
+                          startTime: {hours: 11, minutes:45},
+                          endTime: {hours: 12, minutes:20}
+                      },
+                      {
+                          name: "3rd Period",
+                          startTime: {hours: 12, minutes:25},
+                          endTime: {hours: 13, minutes:55}
+                      },
+                      {
+                          name: "4th Period",
+                          startTime: {hours: 14, minutes:0},
+                          endTime: {hours: 15, minutes:30}
+                      }
+                  ]
+              },
+              {
+                  name: "Tues/Wed (Support Seminar)",
+                  days: [2, 3],
+                  classes: [
+                      {
+                          name: "1st Period",
+                          startTime: {hours: 8, minutes:25},
+                          endTime: {hours: 9, minutes:47}
+                      },
+                      {
+                          name: "TSCT",
+                          startTime: {hours: 9, minutes:47},
+                          endTime: {hours: 9, minutes:57}
+                      },
+                      {
+                          name: "Support Seminar",
+                          startTime: {hours: 10, minutes:2},
+                          endTime: {hours: 10, minutes:34}
+                      },
+                      {
+                          name: "2nd Period",
+                          startTime: {hours: 10, minutes:39},
+                          endTime: {hours: 12, minutes:1}
+                      },
+                      {
+                          name: "Lunch",
+                          startTime: {hours: 12, minutes:1},
+                          endTime: {hours: 12, minutes:36}
+                      },
+                      {
+                          name: "3rd Period",
+                          startTime: {hours: 12, minutes:41},
+                          endTime: {hours: 14, minutes:3}
+                      },
+                      {
+                          name: "4th Period",
+                          startTime: {hours: 14, minutes:8},
+                          endTime: {hours: 15, minutes:30}
+                      }
+                  ],
+              },
+              {
+                  name: "Thursday (Early Release)",
+                  days: [4],
+                  classes: [
+                      {
+                          name: "1st Period",
+                          startTime: {hours: 8, minutes:25},
+                          endTime: {hours: 9, minutes:50}
+                      },
+                      {
+                          name: "TSCT",
+                          startTime: {hours: 9, minutes:50},
+                          endTime: {hours: 10, minutes:0}
+                      },
+                      {
+                          name: "2nd Period",
+                          startTime: {hours: 10, minutes:5},
+                          endTime: {hours: 11, minutes:30}
+                      },
+                      {
+                          name: "Lunch",
+                          startTime: {hours: 11, minutes:30},
+                          endTime: {hours: 12, minutes:5}
+                      },
+                      {
+                          name: "3rd Period",
+                          startTime: {hours: 12, minutes:10},
+                          endTime: {hours: 13, minutes:35}
+                      },
+                      {
+                          name: "4th Period",
+                          startTime: {hours: 13, minutes:40},
+                          endTime: {hours: 15, minutes:5}
+                      }
+                  ]
+              }
+          ]
+      }
+  ];
+
+  
+   
+    
 
     /**
      * The standard run loop for updating the time and other time-related information on the site.
      *
      */
     update = () => {
-        updateTime();
-        document.getElementById('time').innerHTML = getCurrentTimeString();
-        document.getElementById('date').innerHTML = getCurrentDateString();
+        this.updateTime();
+        document.getElementById('time').innerHTML = this.getCurrentTimeString();
+        document.getElementById('date').innerHTML = this.getCurrentDateString();
 
 
-        if (typeof selectedSchoolIndex !== 'undefined') {
-            updateVariables()
-            updateText();
+        if (typeof this.selectedSchoolIndex !== 'undefined') {
+            this.updateVariables()
+            this.updateText();
             document.getElementById("scheduleInfo").style.visibility = "visible";
         } else {
             document.getElementById("scheduleInfo").style.visibility = "hidden";
         }
         
-        setTimeout(update, 500);
+        setTimeout(this.update, 500);
     }
 
     /**
      * mostly useless method to update the currentScheduleIndex and currentClassPeriodIndex
      */
     updateVariables = () => {
-        currentScheduleIndex = getCurrentScheduleIndex();
-        currentClassPeriodIndex = getCurrentClassPeriodIndex();
+        this.currentScheduleIndex = this.getCurrentScheduleIndex();
+        this.currentClassPeriodIndex = this.getCurrentClassPeriodIndex();
     }
 
     /**
@@ -185,16 +195,16 @@ class App extends Component {
      */
     updateText = () => {
 
-        if (getCurrentTimeState() !== DAY_OFF_FLAG ) {
-            document.getElementById("schedule").innerHTML = "You are viewing the <strong>" + getCurrentScheduleName() + "</strong> schedule"
-            document.getElementById("selectedSchoolDisplay").innerHTML = "from <strong>" + schools[selectedSchoolIndex].fullName + "</strong>.";
+        if (this.getCurrentTimeState() !== this.DAY_OFF_FLAG ) {
+            document.getElementById("schedule").innerHTML = "You are viewing the <strong>" + this.getCurrentScheduleName() + "</strong> schedule"
+            document.getElementById("selectedSchoolDisplay").innerHTML = "from <strong>" + this.schools[this.selectedSchoolIndex].fullName + "</strong>.";
 
             document.getElementById("viewScheduleLink").style.display = "block";
         }
 
 
-        switch (getCurrentTimeState()) {
-            case DAY_OFF_FLAG:
+        switch (this.getCurrentTimeState()) {
+            case this.DAY_OFF_FLAG:
                 document.getElementById("schedule").innerHTML = "There's <strong>no class</strong> today!"
                 document.getElementById("viewScheduleLink").style.display = "none";
 
@@ -206,34 +216,34 @@ class App extends Component {
                 
                 break;
 
-            case OUTSIDE_SCHOOL_HOURS_FLAG:
+            case this.OUTSIDE_SCHOOL_HOURS_FLAG:
 
-                if(compareTimes(getCurrentTimeObject(), schools[selectedSchoolIndex].schedules[currentScheduleIndex].classes[0].startTime) == -1) {
+                if(this.compareTimes(this.getCurrentTimeObject(), this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[0].startTime) == -1) {
                     document.getElementById("countdownLabel").innerHTML = "School starts in: "
-                    document.getElementById('timeToEndOfClass').innerHTML =  getTimeToStartOfSchoolString();
+                    document.getElementById('timeToEndOfClass').innerHTML = this.getTimeToStartOfSchoolString();
                 } else {
                     document.getElementById('timeToEndOfClass').innerHTML = "No Class";
                 }
 
-                document.getElementById("nextClass").innerHTML = getClassName(currentClassPeriodIndex+1)
-                document.getElementById("currentClass").innerHTML = getClassName(currentClassPeriodIndex)
+                document.getElementById("nextClass").innerHTML = this.getClassName(this.currentClassPeriodIndex+1)
+                document.getElementById("currentClass").innerHTML = this.getClassName(this.currentClassPeriodIndex)
                 
                 break;
 
-            case SCHOOL_IN_CLASS_OUT_FLAG:
+            case this.SCHOOL_IN_CLASS_OUT_FLAG:
                 
 
-                document.getElementById("nextClass").innerHTML = getClassName(getMostRecentlyStartedClassIndex()+1)
-                document.getElementById("currentClass").innerHTML = schools[selectedSchoolIndex].passingPeriodName
-                document.getElementById('timeToEndOfClass').innerHTML =  getTimeStringFromObject(getTimeTo(schools[selectedSchoolIndex].schedules[currentScheduleIndex].classes[getMostRecentlyStartedClassIndex()+1].startTime));
+                document.getElementById("nextClass").innerHTML = this.getClassName(this.getMostRecentlyStartedClassIndex()+1)
+                document.getElementById("currentClass").innerHTML = this.schools[this.selectedSchoolIndex].passingPeriodName
+                document.getElementById('timeToEndOfClass').innerHTML = this.getTimeStringFromObject(this.getTimeTo(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[this.getMostRecentlyStartedClassIndex()+1].startTime));
                 break;
 
-            case CLASS_IN_SESSION_FLAG:
+            case this.CLASS_IN_SESSION_FLAG:
                 document.getElementById("countdownLabel").innerHTML = "...which ends in: ";
-                document.getElementById('timeToEndOfClass').innerHTML =  getTimeStringFromObject(getTimeTo(schools[selectedSchoolIndex].schedules[currentScheduleIndex].classes[getCurrentClassPeriodIndex()].endTime));
+                document.getElementById('timeToEndOfClass').innerHTML = this.getTimeStringFromObject(this.getTimeTo(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[this.getCurrentClassPeriodIndex()].endTime));
 
-                document.getElementById("nextClass").innerHTML = getClassName(currentClassPeriodIndex+1)
-                document.getElementById("currentClass").innerHTML = getClassName(currentClassPeriodIndex)
+                document.getElementById("nextClass").innerHTML = this.getClassName(this.currentClassPeriodIndex+1)
+                document.getElementById("currentClass").innerHTML = this.getClassName(this.currentClassPeriodIndex)
                 break;
 
             default:
@@ -250,16 +260,16 @@ class App extends Component {
     getCurrentTimeState = () => {
 
         //there is no schedule that applies today
-        if (getCurrentScheduleIndex() <= -1) { return DAY_OFF_FLAG }
+        if (this.getCurrentScheduleIndex() <= -1) { return this.DAY_OFF_FLAG }
 
         //it is a school day but it is not school hours
-        else if (!schoolIsInSession()) { return OUTSIDE_SCHOOL_HOURS_FLAG }
+        else if (!this.schoolIsInSession()) { return this.OUTSIDE_SCHOOL_HOURS_FLAG }
         
         //the current time lies between the start of the first schedules class and the end of the last
-        else if (schoolIsInSession() && !classIsInSession()) { return SCHOOL_IN_CLASS_OUT_FLAG }
+        else if (this.schoolIsInSession() && !this.classIsInSession()) { return this.SCHOOL_IN_CLASS_OUT_FLAG }
 
         //the current time lies within a scheduled class period
-        else if (classIsInSession()) { return CLASS_IN_SESSION_FLAG }
+        else if (this.classIsInSession()) { return this.CLASS_IN_SESSION_FLAG }
 
 
     }
@@ -268,8 +278,8 @@ class App extends Component {
      * @returns the current schedule name or "No School" if there is no school scheduled today
      */
     getCurrentScheduleName = () => {
-        if (!isNoSchoolDay()) {
-            return schools[selectedSchoolIndex].schedules[currentScheduleIndex].name
+        if (!this.isNoSchoolDay()) {
+            return this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].name
         } else { return "No School"}
     }
 
@@ -279,7 +289,7 @@ class App extends Component {
      * @returns a boolean representing if class is in session
      */
     classIsInSession = () => {
-        return (currentClassPeriodIndex >= 0 && !isNoSchoolDay())
+        return (this.currentClassPeriodIndex >= 0 && !this.isNoSchoolDay())
         //might later want to add a check to make sure that currentClassPeriodIndex is not greater than the number of classes in the schedule for today
     }
 
@@ -290,10 +300,10 @@ class App extends Component {
      */
     schoolIsInSession = () => {
 
-        return checkTimeRange(
-            getCurrentTimeObject(),
-            schools[selectedSchoolIndex].schedules[currentScheduleIndex].classes[0].startTime,
-            schools[selectedSchoolIndex].schedules[currentScheduleIndex].classes[schools[selectedSchoolIndex].schedules[currentScheduleIndex].classes.length-1].endTime
+        return this.checkTimeRange(
+            this.getCurrentTimeObject(),
+            this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[0].startTime,
+            this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes.length-1].endTime
             ) == 0
     }
 
@@ -303,7 +313,7 @@ class App extends Component {
      * @returns true if there is no schedule that applies to today, false if there is
      */
     isNoSchoolDay = () => {
-        return currentScheduleIndex <= -1;
+        return this.currentScheduleIndex <= -1;
         //might later want to add a check to make sure that currentScheduleIndex is not greater than the number of schedules
     }
 
@@ -311,23 +321,23 @@ class App extends Component {
     /**
      * This updates the variables that keep track of the current time and date
      */
-    updateTime = () => { currentDate = new Date();}
+    updateTime = () => { this.currentDate = new Date();}
 
     getCurrentTimeObject = () => {
-    return {hours: currentDate.getHours(), minutes: currentDate.getMinutes(), seconds: currentDate.getSeconds()}
+    return {hours: this.currentDate.getHours(), minutes: this.currentDate.getMinutes(), seconds: this.currentDate.getSeconds()}
     }
     
 
     /**
      * @returns the current time as a formatted string
      */
-    getCurrentTimeString = () => { return currentDate.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: !use24HourTime }) }
+    getCurrentTimeString = () => { return this.currentDate.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: !this.use24HourTime }) }
 
     /**
      * @returns the current date as a formatted string
      */
     getCurrentDateString = () => { 
-    return "on <strong>" + currentDate.toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }) + "</strong>"
+    return "on <strong>" + this.currentDate.toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }) + "</strong>"
     }
 
     /**
@@ -336,14 +346,14 @@ class App extends Component {
      * @returns an index for looking up the current class period, or -1 if there is no class happening right now 
      */
     getCurrentClassPeriodIndex = () => {
-        if (isNoSchoolDay()) {
+        if (this.isNoSchoolDay()) {
             //return immediately if there is no school today
             return -1
         }
 
         //using for over forEach() because we are breaking out of the loop early
-        for (let i = 0; i < schools[selectedSchoolIndex].schedules[currentScheduleIndex].classes.length; i++) {
-            if (checkClassTime(schools[selectedSchoolIndex].schedules[currentScheduleIndex].classes[i]) == 0) {
+        for (let i = 0; i < this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes.length; i++) {
+            if (this.checkClassTime(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[i]) == 0) {
                 return i
                 break;//not sure if this is necessary so I included it anyway
             }
@@ -358,18 +368,18 @@ class App extends Component {
      */
     getMostRecentlyStartedClassIndex = () => {
 
-        if (isNoSchoolDay()) {
+        if (this.isNoSchoolDay()) {
             //return immediately if there is no school today
             return -1
         }
 
         
         //using for over forEach() because we are breaking out of the loop early
-        for (let i = 0; i < schools[selectedSchoolIndex].schedules[currentScheduleIndex].classes.length; i++) {
-            let classPeriodStatus = checkClassTime(schools[selectedSchoolIndex].schedules[currentScheduleIndex].classes[i])
+        for (let i = 0; i < this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes.length; i++) {
+            let classPeriodStatus = this.checkClassTime(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[i])
             let nextClassPeriodStatus;
-            if (i+1 < schools[selectedSchoolIndex].schedules[currentScheduleIndex].classes.length) {
-                nextClassPeriodStatus = checkClassTime(schools[selectedSchoolIndex].schedules[currentScheduleIndex].classes[i+1])
+            if (i+1 < this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes.length) {
+                nextClassPeriodStatus = this.checkClassTime(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[i+1])
             }
 
             if (classPeriodStatus == -1) {
@@ -394,8 +404,8 @@ class App extends Component {
      */
     getCurrentScheduleIndex = () => {
         //using for over forEach() because we are breaking out of the loop early
-        for (let i = 0; i < schools[selectedSchoolIndex].schedules.length; i++) {
-            if (schools[selectedSchoolIndex].schedules[i].days.includes(currentDate.getDay())) {
+        for (let i = 0; i < this.schools[this.selectedSchoolIndex].schedules.length; i++) {
+            if (this.schools[this.selectedSchoolIndex].schedules[i].days.includes(this.currentDate.getDay())) {
                 return i
             }
         }
@@ -413,8 +423,8 @@ class App extends Component {
      */
     compareTimes = ( timeObject1, timeObject2 ) => {
 
-        let time1 = sanitizeTimeObject(timeObject1)
-        let time2 = sanitizeTimeObject(timeObject2)
+        let time1 = this.sanitizeTimeObject(timeObject1)
+        let time2 = this.sanitizeTimeObject(timeObject2)
 
 
         let hoursDiff = time1.hours - time2.hours;
@@ -450,8 +460,8 @@ class App extends Component {
      */
     checkTimeRange = (checkTime, startTime, endTime) => {
 
-        let startCheck = compareTimes(checkTime, startTime)
-        let endCheck = compareTimes(checkTime, endTime)
+        let startCheck = this.compareTimes(checkTime, startTime)
+        let endCheck = this.compareTimes(checkTime, endTime)
 
         if (startCheck == -1) { return -1 }
         else if ( startCheck >= 0 && endCheck <= 0) { return 0 }
@@ -460,7 +470,7 @@ class App extends Component {
     }
 
     checkClassTime = (classPeriod) => {
-        return checkTimeRange(getCurrentTimeObject(), classPeriod.startTime, classPeriod.endTime)
+        return this.checkTimeRange(this.getCurrentTimeObject(), classPeriod.startTime, classPeriod.endTime)
     }
 
     /**
@@ -474,7 +484,7 @@ class App extends Component {
         var time2 = new Date(2000, 0, 1, timeObject2.hours, timeObject2.minutes, timeObject2.seconds);
         
                                                     //order doesnt matter
-        return convertMillisecondsToTime(Math.abs(time1 - time2));
+        return this.convertMillisecondsToTime(Math.abs(time1 - time2));
     }
 
 
@@ -513,7 +523,7 @@ class App extends Component {
      */
     convertMillisecondsToTime = (milliseconds) => {
         //theres probably a better way to do this using Date()
-        time = {hours: 0, minutes:0, seconds:0, milliseconds: 0};
+        let time = {hours: 0, minutes:0, seconds:0, milliseconds: 0};
         //convert from milliseconds to H:M:S
         time.hours = Math.floor(milliseconds / 1000 / 60 / 60);
         milliseconds -= time.hours * 1000 * 60 * 60;
@@ -531,8 +541,8 @@ class App extends Component {
      * @returns the time to the start of school as a string
      */
     getTimeToStartOfSchoolString = () => {
-        if (!classIsInSession() && !isNoSchoolDay() && compareTimes(getCurrentTimeObject(), schools[selectedSchoolIndex].schedules[currentScheduleIndex].classes[0].startTime) == -1) {
-            return getTimeStringFromObject(getTimeTo(schools[selectedSchoolIndex].schedules[currentScheduleIndex].classes[0].startTime));
+        if (!this.classIsInSession() && !this.isNoSchoolDay() && this.compareTimes(this.getCurrentTimeObject(), this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[0].startTime) == -1) {
+            return this.getTimeStringFromObject(this.getTimeTo(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[0].startTime));
         } else {
             return "No Class"
         }
@@ -546,7 +556,7 @@ class App extends Component {
      * @returns
      */
     getTimeTo = (timeObject) => {
-        return getTimeDelta(getCurrentTimeObject(), timeObject)
+        return this.getTimeDelta(this.getCurrentTimeObject(), timeObject)
     }
 
     /**
@@ -559,7 +569,7 @@ class App extends Component {
     getTimeStringFromObject = (timeObject, includeSeconds=true) => {
         if (includeSeconds) {
             //you can really tell how much i dont like to duplicate code here haha
-            return getTimeStringFromObject(timeObject, false) + ":" + timeObject.seconds.toString().padStart(2, '0');
+            return this.getTimeStringFromObject(timeObject, false) + ":" + timeObject.seconds.toString().padStart(2, '0');
         } else {
             return timeObject.hours.toString().padStart(2, '0') + ":" + timeObject.minutes.toString().padStart(2, '0')
         }
@@ -571,7 +581,7 @@ class App extends Component {
      * @returns returns the class name for the given index or "No Class" if there is no class in session
      */
     getClassName = (index) => {
-        var classes = schools[selectedSchoolIndex].schedules[currentScheduleIndex].classes;
+        var classes = this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes;
         
         if (index >= 0 && index < classes.length) {
                 return classes[index].name.toString()
@@ -593,19 +603,19 @@ class App extends Component {
         //tbl.setAttribute('border', '1');
         var tbdy = document.createElement('tbody');
 
-            for (var i = 0; i < schools[selectedSchoolIndex].schedules[currentScheduleIndex].classes.length; i++) {
-                if (schools[selectedSchoolIndex].schedules[currentScheduleIndex].classes[i].showInFullSchedule != false) {
+            for (var i = 0; i < this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes.length; i++) {
+                if (this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[i].showInFullSchedule != false) {
                 var tr = document.createElement('tr');
                 //for (var j = 0; j < 3; j++) {
 
                     var td = document.createElement('td');
-                    td.innerHTML = schools[selectedSchoolIndex].schedules[currentScheduleIndex].classes[i].name;
+                    td.innerHTML = this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[i].name;
                     td.style.fontWeight = "bold";
                     //td.appendChild(document.createTextNode(data.schedules[currentScheduleIndex].classes[i].name))
                     tr.appendChild(td)
 
                     var td = document.createElement('td');
-                    td.innerHTML = getFormattedTimeStringFromObject(schools[selectedSchoolIndex].schedules[currentScheduleIndex].classes[i].startTime) + " - " + getFormattedTimeStringFromObject(schools[selectedSchoolIndex].schedules[currentScheduleIndex].classes[i].endTime)
+                    td.innerHTML = this.getFormattedTimeStringFromObject(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[i].startTime) + " - " + this.getFormattedTimeStringFromObject(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[i].endTime)
                     //td.appendChild(document.createTextNode(data.schedules[currentScheduleIndex].classes[i].name))
                     tr.appendChild(td);
 
@@ -628,15 +638,15 @@ class App extends Component {
         var pmString = "";
 
         //convert to 12 hour if necessary
-        if (!use24HourTime && timeObject.hours > 12) {
+        if (!this.use24HourTime && timeObject.hours > 12) {
             timeObject.hours -= 12;
             pmString = " PM";
 
-        } else if (!use24HourTime) {
+        } else if (!this.use24HourTime) {
             pmString = " AM";
         }
 
-        return getTimeStringFromObject(timeObject, false) + pmString;
+        return this.getTimeStringFromObject(timeObject, false) + pmString;
     }
 
     /**
@@ -678,23 +688,23 @@ class App extends Component {
      * @param {*} [type=FLASH_INFO] the flag of the style to use when displaying the message. Default: INFO
      * @param {number} [timeout=5000] the mumber of milliseconds to wait before the message disappears again. Anything less than 1 will disable the timeout
      */
-    flashMessage = (message, type = FLASH_INFO, timeout = 5000) => {
-        flash = document.getElementById("flash")
+    flashMessage = (message, type = this.FLASH_INFO, timeout = 5000) => {
+        let flash = document.getElementById("flash")
 
         flash.innerHTML = message;
         // flash.style.visibility = "visible";
         flash.style.display = "normal";
 
         switch (type) {
-            case FLASH_SUCCESS:
+            case this.FLASH_SUCCESS:
                 flash.className = "success"; 
                 break;
 
-            case FLASH_WARN:
+            case this.FLASH_WARN:
                 flash.className = "warning";
                 break;
                 
-            case FLASH_DANGER:
+            case this.FLASH_DANGER:
                 flash.className = "danger";
                 break;
 
