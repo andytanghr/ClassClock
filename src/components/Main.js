@@ -82,7 +82,7 @@ class Main extends Component {
      */
     updateVariables = () => {
         this.currentScheduleIndex = Helpers.getCurrentScheduleIndex(this.schools[this.selectedSchoolIndex].schedules);
-        this.currentClassPeriodIndex = Helpers.getCurrentClassPeriodIndex(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex]);
+        this.currentClassPeriodIndex = Helpers.getCurrentClassPeriodIndex(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex], this.currentDate);
     }
 
     /**
@@ -138,7 +138,7 @@ class Main extends Component {
 
             case this.CLASS_IN_SESSION_FLAG:
             this.setState({countdownLabel:  "...which ends in: " });
-            this.setState({timeToEndOfClass: this.getTimeStringFromObject(this.getTimeTo(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[Helpers.getCurrentClassPeriodIndex(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex])].endTime)) });
+            this.setState({timeToEndOfClass: this.getTimeStringFromObject(this.getTimeTo(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[Helpers.getCurrentClassPeriodIndex(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex], this.currentDate)].endTime)) });
 
             this.setState({nextClass: this.getClassName(this.currentClassPeriodIndex+1) });
             this.setState({currentClass: this.getClassName(this.currentClassPeriodIndex) });
