@@ -212,8 +212,9 @@ class App extends Component {
     updateText = () => {
 
         if (this.getCurrentTimeState() !== this.DAY_OFF_FLAG ) {
-            this.setState({schedule: "You are viewing the <strong>" + this.getCurrentScheduleName() + "</strong> schedule"});
-            this.setState({selectedSchoolDisplay: "from <strong>" + this.schools[this.selectedSchoolIndex].fullName + "</strong>."});
+
+            this.setState({schedule: ["You are viewing the ", <strong>{this.getCurrentScheduleName()}</strong>, " schedule"]});
+            this.setState({selectedSchoolDisplay: ["from ", <strong>{this.schools[this.selectedSchoolIndex].fullName}</strong> ,"."]});
 
             this.setState({viewScheduleLinkDispl: "block"});
         }
@@ -221,7 +222,7 @@ class App extends Component {
 
         switch (this.getCurrentTimeState()) {
             case this.DAY_OFF_FLAG:
-            this.setState({schedule: "There's <strong>no class</strong> today!" });
+            this.setState({schedule: ["There's ", <strong>no class</strong>, " today!" ]});
             this.setState({viewScheduleLink: "none" });
 
                 
@@ -355,7 +356,7 @@ class App extends Component {
      * @returns the current date as a formatted string
      */
     getCurrentDateString = () => { 
-    return "on <strong>" + this.currentDate.toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }) + "</strong>"
+    return ["on", <strong> {this.currentDate.toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }) } </strong>]
     }
 
     /**
