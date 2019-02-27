@@ -214,6 +214,10 @@ class Helpers {
         }
     }
 
+    static getTimeObjectFromTime = (currentDate) => {
+        return {hours: currentDate.getHours(), minutes: currentDate.getMinutes(), seconds: currentDate.getSeconds()}
+    }
+
 }
 
 
