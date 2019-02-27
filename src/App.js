@@ -4,10 +4,12 @@ import './App.css';
 
 class App extends Component {
 
-    // constructor() {
-    //     super();
-        
-    //   }
+    constructor() {
+        super();
+        this.use24HourTime = this.getLocalStorageBoolean("use24HourTime", false);
+
+        this.update();
+      }
 
     DAY_OFF_FLAG = "day off";
     OUTSIDE_SCHOOL_HOURS_FLAG = "outside school hours";
@@ -28,7 +30,7 @@ class App extends Component {
     selectedSchoolIndex = 0;
   
   
-    use24HourTime = this.getLocalStorageBoolean("use24HourTime", false);
+    use24HourTime;
 
 
 
@@ -218,7 +220,7 @@ class App extends Component {
 
             case this.OUTSIDE_SCHOOL_HOURS_FLAG:
 
-                if(this.compareTimes(this.getCurrentTimeObject(), this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[0].startTime) == -1) {
+                if(this.compareTimes(this.getCurrentTimeObject(), this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[0].startTime) === -1) {
                     document.getElementById("countdownLabel").innerHTML = "School starts in: "
                     document.getElementById('timeToEndOfClass').innerHTML = this.getTimeToStartOfSchoolString();
                 } else {
@@ -304,7 +306,7 @@ class App extends Component {
             this.getCurrentTimeObject(),
             this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[0].startTime,
             this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes.length-1].endTime
-            ) == 0
+            ) === 0
     }
 
     /**
@@ -353,9 +355,9 @@ class App extends Component {
 
         //using for over forEach() because we are breaking out of the loop early
         for (let i = 0; i < this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes.length; i++) {
-            if (this.checkClassTime(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[i]) == 0) {
+            if (this.checkClassTime(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[i]) === 0) {
                 return i
-                break;//not sure if this is necessary so I included it anyway
+                //break;//not sure if this is necessary so I included it anyway
             }
         }
         return -1 //no match found, there is no class currently in session
@@ -382,12 +384,12 @@ class App extends Component {
                 nextClassPeriodStatus = this.checkClassTime(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[i+1])
             }
 
-            if (classPeriodStatus == -1) {
+            if (classPeriodStatus === -1) {
                 //class hasnt started, do nothing
-            } else if (classPeriodStatus == 0 ){
+            } else if (classPeriodStatus === 0 ){
                 //class is currently in session, return index
                 return i
-            } else if (classPeriodStatus == 1 && (typeof nextClassPeriodStatus !== "undefined" && nextClassPeriodStatus == -1)) {
+            } else if (classPeriodStatus === 1 && (typeof nextClassPeriodStatus !== "undefined" && nextClassPeriodStatus === -1)) {
                 //class has passed and next class hasnt started (indicating a passing period)
                 //return the class index
                 return i
@@ -463,7 +465,7 @@ class App extends Component {
         let startCheck = this.compareTimes(checkTime, startTime)
         let endCheck = this.compareTimes(checkTime, endTime)
 
-        if (startCheck == -1) { return -1 }
+        if (startCheck === -1) { return -1 }
         else if ( startCheck >= 0 && endCheck <= 0) { return 0 }
         else { return 1 }
 
@@ -500,10 +502,10 @@ class App extends Component {
         //this prevents the original object from being modified
         var newTimeObject = timeObject;
 
-        if (newTimeObject.hours == undefined ) { newTimeObject.hours = 0; }
-        if (newTimeObject.minutes == undefined ) { newTimeObject.minutes = 0; }
-        if (newTimeObject.seconds == undefined ) { newTimeObject.seconds = 0; }
-        // if (timeObject.milliseconds == undefined ) { timeObject.milliseconds = 0; }
+        if (newTimeObject.hours === undefined ) { newTimeObject.hours = 0; }
+        if (newTimeObject.minutes === undefined ) { newTimeObject.minutes = 0; }
+        if (newTimeObject.seconds === undefined ) { newTimeObject.seconds = 0; }
+        // if (timeObject.milliseconds === undefined ) { timeObject.milliseconds = 0; }
 
         //timeObjects are always in 24-hour time
         newTimeObject.hours = newTimeObject.hours % 24;
@@ -541,7 +543,7 @@ class App extends Component {
      * @returns the time to the start of school as a string
      */
     getTimeToStartOfSchoolString = () => {
-        if (!this.classIsInSession() && !this.isNoSchoolDay() && this.compareTimes(this.getCurrentTimeObject(), this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[0].startTime) == -1) {
+        if (!this.classIsInSession() && !this.isNoSchoolDay() && this.compareTimes(this.getCurrentTimeObject(), this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[0].startTime) === -1) {
             return this.getTimeStringFromObject(this.getTimeTo(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[0].startTime));
         } else {
             return "No Class"
@@ -604,7 +606,7 @@ class App extends Component {
         var tbdy = document.createElement('tbody');
 
             for (var i = 0; i < this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes.length; i++) {
-                if (this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[i].showInFullSchedule != false) {
+                if (this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[i].showInFullSchedule !== false) {
                 var tr = document.createElement('tr');
                 //for (var j = 0; j < 3; j++) {
 
@@ -614,10 +616,10 @@ class App extends Component {
                     //td.appendChild(document.createTextNode(data.schedules[currentScheduleIndex].classes[i].name))
                     tr.appendChild(td)
 
-                    var td = document.createElement('td');
-                    td.innerHTML = this.getFormattedTimeStringFromObject(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[i].startTime) + " - " + this.getFormattedTimeStringFromObject(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[i].endTime)
+                    var td2 = document.createElement('td');
+                    td2.innerHTML = this.getFormattedTimeStringFromObject(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[i].startTime) + " - " + this.getFormattedTimeStringFromObject(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[i].endTime)
                     //td.appendChild(document.createTextNode(data.schedules[currentScheduleIndex].classes[i].name))
-                    tr.appendChild(td);
+                    tr.appendChild(td2);
 
                 // }
                 tbdy.appendChild(tr);
@@ -662,7 +664,7 @@ class App extends Component {
             return unsetDefault
         } else {
             //this is a better way to to convert the string from localStorage into a boolean for checkbox.checked. https://stackoverflow.com/a/264037
-            return (localStorage.getItem(key) == "true")
+            return (localStorage.getItem(key) === "true")
         }
     }
 
@@ -741,7 +743,7 @@ class App extends Component {
                 <a className="navbutton" href="settings.html"><i className="fas fa-cog"></i></a>
                 <br />
                 <p className="centered">It is currently: </p>
-                <h1 className="centered time" id="time"></h1>
+                <h1 className="centered time" id="time">content</h1>
                 <p className="centered bottomSpace" id="date"></p>
 
                 <section id="scheduleInfo" className="verticalFlex">
@@ -751,13 +753,13 @@ class App extends Component {
                     <a href="schedule.html" className="centered bottomSpace" id="viewScheduleLink">View Schedule</a>
 
                     <p className="centered label">You are currently in: </p>
-                    <h1 className="centered bottomSpace" id="currentClass"></h1>
+                    <h1 className="centered bottomSpace" id="currentClass">content</h1>
 
                     <p className="centered label" id="countdownLabel">...which ends in: </p>
-                    <h1 className="centered bottomSpace time bigger" id="timeToEndOfClass"></h1>
+                    <h1 className="centered bottomSpace time bigger" id="timeToEndOfClass">content</h1>
 
                     <p className="centered label">Your next class period is: </p>
-                    <h1 className="centered bottomSpace" id="nextClass"></h1>
+                    <h1 className="centered bottomSpace" id="nextClass">content</h1>
 
                 </section>
             </div>
