@@ -188,6 +188,22 @@ class Helpers {
         }
     }
 
+    /**
+     *  converts a time object into a string
+     *
+     * @param {*} timeObject the time object to convert
+     * @param {boolean} [includeSeconds=true] a boolean representing whether seconds should be included in this string (i.e. for a countdown) or not (i.e. for displaying a fixed time)
+     * @returns a String in either HH:MM format or HH:MM:SS format
+     */
+    static getTimeStringFromObject = (timeObject, includeSeconds=true) => {
+        if (includeSeconds) {
+            //you can really tell how much i dont like to duplicate code here haha
+            return this.getTimeStringFromObject(timeObject, false) + ":" + timeObject.seconds.toString().padStart(2, '0');
+        } else {
+            return timeObject.hours.toString().padStart(2, '0') + ":" + timeObject.minutes.toString().padStart(2, '0')
+        }
+    }
+
 }
 
 

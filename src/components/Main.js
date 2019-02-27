@@ -304,21 +304,6 @@ class Main extends Component {
         return Helpers.getTimeDelta(this.getCurrentTimeObject(), timeObject)
     }
 
-    /**
-     *  converts a time object into a string
-     *
-     * @param {*} timeObject the time object to convert
-     * @param {boolean} [includeSeconds=true] a boolean representing whether seconds should be included in this string (i.e. for a countdown) or not (i.e. for displaying a fixed time)
-     * @returns a String in either HH:MM format or HH:MM:SS format
-     */
-    getTimeStringFromObject = (timeObject, includeSeconds=true) => {
-        if (includeSeconds) {
-            //you can really tell how much i dont like to duplicate code here haha
-            return this.getTimeStringFromObject(timeObject, false) + ":" + timeObject.seconds.toString().padStart(2, '0');
-        } else {
-            return timeObject.hours.toString().padStart(2, '0') + ":" + timeObject.minutes.toString().padStart(2, '0')
-        }
-    }
 
     /**
      *
@@ -399,18 +384,6 @@ class Main extends Component {
         }
 
     }
-
-    // var a=document.getElementsByTagName("a");
-    //     for(var i=0;i<a.length;i++)
-    //     {
-    //         if (a[i].classList.contains("navbutton")) {
-    //             a[i].onclick=function()
-    //             {
-    //                 window.location=this.getAttribute("href");
-    //                 return false
-    //             }
-    //         }
-    //     }
 
 
     render() {
