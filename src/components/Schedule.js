@@ -8,8 +8,8 @@ class Schedule extends Component {
         super(props);
 
         this.state={
-            schoolName: '',
-            scheduleDisplay: ''
+            schoolName: this.props.schools[0].fullName,
+            scheduleDisplay: this.props.schools[0].schedules[Helpers.getCurrentScheduleIndex(this.props.schools[0].schedules)].name + " schedule"
 
         }
 
