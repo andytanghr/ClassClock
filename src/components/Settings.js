@@ -43,7 +43,7 @@ class Settings extends Component {
     render() {
         return (
             <div className="App">
-                <a className="navbutton" href="index.html"><i className="fas fa-home"></i></a>
+                <a className="navbutton" href="/"><i className="fas fa-home"></i></a>
                 <br />
                 <section id="options" className="centered topSpace">
 

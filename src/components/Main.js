@@ -756,7 +756,7 @@ class Main extends Component {
     render() {
         return (
             <div className="App">
-                <a className="navbutton" href="settings.html"><i className="fas fa-cog"></i></a>
+                <a className="navbutton" href="settings"><i className="fas fa-cog"></i></a>
                 <br />
                 <p className="centered">It is currently: </p>
                 <h1 className="centered time" id="time">{this.state.time}</h1>
@@ -766,7 +766,7 @@ class Main extends Component {
 
                     <p className="centered" id="schedule">{this.state.schedule}</p>
                     <p className="centered" id="selectedSchoolDisplay">{this.state.selectedSchoolDisplay}</p>
-                    <a href="schedule.html" className="centered bottomSpace" id="viewScheduleLink">View Schedule</a>
+                    <a href="schedule" className="centered bottomSpace" id="viewScheduleLink">View Schedule</a>
 
                     <p className="centered label">You are currently in: </p>
                     <h1 className="centered bottomSpace" id="currentClass">{this.state.currentClass}</h1>
