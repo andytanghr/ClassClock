@@ -609,44 +609,8 @@ class Main extends Component {
     }
 
 
-
-    /**
-     * this for populating the table on the schedule page
-     *
-     */
-    populateScheduleTable = () => {
-        // var body = document.getElementsByTagName('body')[0];
-        var tbl = document.getElementById("scheduleTable")//createElement('table');
-        // tbl.style.width = '100%';
-        //tbl.setAttribute('border', '1');
-        var tbdy = document.createElement('tbody');
-
-            for (var i = 0; i < this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes.length; i++) {
-                if (this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[i].showInFullSchedule !== false) {
-                var tr = document.createElement('tr');
-                //for (var j = 0; j < 3; j++) {
-
-                    var td = document.createElement('td');
-                    td.innerHTML = this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[i].name;
-                    td.style.fontWeight = "bold";
-                    //td.appendChild(document.createTextNode(data.schedules[currentScheduleIndex].classes[i].name))
-                    tr.appendChild(td)
-
-                    var td2 = document.createElement('td');
-                    td2.innerHTML = this.getFormattedTimeStringFromObject(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[i].startTime) + " - " + this.getFormattedTimeStringFromObject(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[i].endTime)
-                    //td.appendChild(document.createTextNode(data.schedules[currentScheduleIndex].classes[i].name))
-                    tr.appendChild(td2);
-
-                // }
-                tbdy.appendChild(tr);
-            }
-        }
-        tbl.appendChild(tbdy);
-    // body.appendChild(tbl)
-    }
-
-
-    /**
+    
+/**
      *  converts a time object into a formatted time string based on the user's time format (12/24 hour) preferences
      *
      * @param {*} timeObject the time object to convert to a string
