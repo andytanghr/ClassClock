@@ -6,6 +6,19 @@ class App extends Component {
 
     constructor() {
         super();
+
+        this.state={
+            time:'',
+            date:'',
+            scheduleInfoVis: '',
+            schedule: '',
+            viewScheduleLinkDispl: '',
+            selectedSchoolDisplay: '',
+            hideLabels: false,
+
+
+        }
+
         this.use24HourTime = this.getLocalStorageBoolean("use24HourTime", false);
 
         this.update();
@@ -169,16 +182,17 @@ class App extends Component {
      */
     update = () => {
         this.updateTime();
-        document.getElementById('time').innerHTML = this.getCurrentTimeString();
-        document.getElementById('date').innerHTML = this.getCurrentDateString();
+        this.setState({time: this.getCurrentTimeString()});
+        this.setState({date: this.getCurrentDateString()});
 
 
         if (typeof this.selectedSchoolIndex !== 'undefined') {
             this.updateVariables()
             this.updateText();
-            document.getElementById("scheduleInfo").style.visibility = "visible";
+            this.setState({scheduleInfoVis: "visible"});
+            
         } else {
-            document.getElementById("scheduleInfo").style.visibility = "hidden";
+            this.setstate({scheduleInfoVis: "hidden"});
         }
         
         setTimeout(this.update, 500);
@@ -198,22 +212,24 @@ class App extends Component {
     updateText = () => {
 
         if (this.getCurrentTimeState() !== this.DAY_OFF_FLAG ) {
-            document.getElementById("schedule").innerHTML = "You are viewing the <strong>" + this.getCurrentScheduleName() + "</strong> schedule"
-            document.getElementById("selectedSchoolDisplay").innerHTML = "from <strong>" + this.schools[this.selectedSchoolIndex].fullName + "</strong>.";
+            this.setState({schedule: "You are viewing the <strong>" + this.getCurrentScheduleName() + "</strong> schedule"});
+            this.setState({selectedSchoolDisplay: "from <strong>" + this.schools[this.selectedSchoolIndex].fullName + "</strong>."});
 
-            document.getElementById("viewScheduleLink").style.display = "block";
+            this.setState({viewScheduleLinkDispl: "block"});
         }
 
 
         switch (this.getCurrentTimeState()) {
             case this.DAY_OFF_FLAG:
-                document.getElementById("schedule").innerHTML = "There's <strong>no class</strong> today!"
-                document.getElementById("viewScheduleLink").style.display = "none";
+            this.setState({schedule: "There's <strong>no class</strong> today!" });
+            this.setState({viewScheduleLink: "none" });
 
-                let labels = document.getElementsByClassName("label")
-                for (let i = 0; i < labels.length; i++ ) {
-                    labels[i].style.display = "none";
-                }
+                
+            this.setState({hideLabels: true});
+            // let labels = document.getElementsByClassName("label")
+            //     for (let i = 0; i < labels.length; i++ ) {
+            //         labels[i].style.display = "none";
+            //     }
 
                 
                 break;
@@ -221,31 +237,31 @@ class App extends Component {
             case this.OUTSIDE_SCHOOL_HOURS_FLAG:
 
                 if(this.compareTimes(this.getCurrentTimeObject(), this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[0].startTime) === -1) {
-                    document.getElementById("countdownLabel").innerHTML = "School starts in: "
-                    document.getElementById('timeToEndOfClass').innerHTML = this.getTimeToStartOfSchoolString();
+                    this.setState({countdownLabel: "School starts in: " });
+                    this.setState({timeToEndOfClass: this.getTimeToStartOfSchoolString() });
                 } else {
-                    document.getElementById('timeToEndOfClass').innerHTML = "No Class";
+                    this.setState({timeToEndOfClass: "No Class" });
                 }
 
-                document.getElementById("nextClass").innerHTML = this.getClassName(this.currentClassPeriodIndex+1)
-                document.getElementById("currentClass").innerHTML = this.getClassName(this.currentClassPeriodIndex)
+                this.setState({nextClass: this.getClassName(this.currentClassPeriodIndex+1) });
+                this.setState({currentClass: this.getClassName(this.currentClassPeriodIndex) });
                 
                 break;
 
             case this.SCHOOL_IN_CLASS_OUT_FLAG:
                 
 
-                document.getElementById("nextClass").innerHTML = this.getClassName(this.getMostRecentlyStartedClassIndex()+1)
-                document.getElementById("currentClass").innerHTML = this.schools[this.selectedSchoolIndex].passingPeriodName
-                document.getElementById('timeToEndOfClass').innerHTML = this.getTimeStringFromObject(this.getTimeTo(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[this.getMostRecentlyStartedClassIndex()+1].startTime));
+            this.setState({nextClass: this.getClassName(this.getMostRecentlyStartedClassIndex()+1) });
+            this.setState({currentClass: this.schools[this.selectedSchoolIndex].passingPeriodName });
+            this.setState({timeToEndOfClass: this.getTimeStringFromObject(this.getTimeTo(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[this.getMostRecentlyStartedClassIndex()+1].startTime)) });
                 break;
 
             case this.CLASS_IN_SESSION_FLAG:
-                document.getElementById("countdownLabel").innerHTML = "...which ends in: ";
-                document.getElementById('timeToEndOfClass').innerHTML = this.getTimeStringFromObject(this.getTimeTo(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[this.getCurrentClassPeriodIndex()].endTime));
+            this.setState({countdownLabel:  "...which ends in: " });
+            this.setState({timeToEndOfClass: this.getTimeStringFromObject(this.getTimeTo(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[this.getCurrentClassPeriodIndex()].endTime)) });
 
-                document.getElementById("nextClass").innerHTML = this.getClassName(this.currentClassPeriodIndex+1)
-                document.getElementById("currentClass").innerHTML = this.getClassName(this.currentClassPeriodIndex)
+            this.setState({nextClass: this.getClassName(this.currentClassPeriodIndex+1) });
+            this.setState({currentClass: this.getClassName(this.currentClassPeriodIndex) });
                 break;
 
             default:
@@ -743,23 +759,23 @@ class App extends Component {
                 <a className="navbutton" href="settings.html"><i className="fas fa-cog"></i></a>
                 <br />
                 <p className="centered">It is currently: </p>
-                <h1 className="centered time" id="time">content</h1>
-                <p className="centered bottomSpace" id="date"></p>
+                <h1 className="centered time" id="time">{this.state.time}</h1>
+                <p className="centered bottomSpace" id="date">{this.state.date}</p>
 
                 <section id="scheduleInfo" className="verticalFlex">
 
-                    <p className="centered" id="schedule"></p>
-                    <p className="centered" id="selectedSchoolDisplay"></p>
+                    <p className="centered" id="schedule">{this.state.schedule}</p>
+                    <p className="centered" id="selectedSchoolDisplay">{this.state.selectedSchoolDisplay}</p>
                     <a href="schedule.html" className="centered bottomSpace" id="viewScheduleLink">View Schedule</a>
 
                     <p className="centered label">You are currently in: </p>
-                    <h1 className="centered bottomSpace" id="currentClass">content</h1>
+                    <h1 className="centered bottomSpace" id="currentClass">{this.state.currentClass}</h1>
 
                     <p className="centered label" id="countdownLabel">...which ends in: </p>
-                    <h1 className="centered bottomSpace time bigger" id="timeToEndOfClass">content</h1>
+                    <h1 className="centered bottomSpace time bigger" id="timeToEndOfClass">{this.state.timeToEndOfClass}</h1>
 
                     <p className="centered label">Your next class period is: </p>
-                    <h1 className="centered bottomSpace" id="nextClass">content</h1>
+                    <h1 className="centered bottomSpace" id="nextClass">{this.state.nextClass}</h1>
 
                 </section>
             </div>
