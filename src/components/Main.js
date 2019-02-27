@@ -81,7 +81,7 @@ class Main extends Component {
      * mostly useless method to update the currentScheduleIndex and currentClassPeriodIndex
      */
     updateVariables = () => {
-        this.currentScheduleIndex = this.getCurrentScheduleIndex();
+        this.currentScheduleIndex = this.getCurrentScheduleIndex(this.schools[this.selectedSchoolIndex].schedules);
         this.currentClassPeriodIndex = this.getCurrentClassPeriodIndex();
     }
 
@@ -158,7 +158,7 @@ class Main extends Component {
     getCurrentTimeState = () => {
 
         //there is no schedule that applies today
-        if (this.getCurrentScheduleIndex() <= -1) { return this.DAY_OFF_FLAG }
+        if (this.getCurrentScheduleIndex(this.schools[this.selectedSchoolIndex].schedules) <= -1) { return this.DAY_OFF_FLAG }
 
         //it is a school day but it is not school hours
         else if (!this.schoolIsInSession()) { return this.OUTSIDE_SCHOOL_HOURS_FLAG }
@@ -300,10 +300,10 @@ class Main extends Component {
      *
      * @returns an index for looking up the current schedule, or -1 if there is no school today
      */
-    getCurrentScheduleIndex = () => {
+    getCurrentScheduleIndex = (schedules) => {
         //using for over forEach() because we are breaking out of the loop early
-        for (let i = 0; i < this.schools[this.selectedSchoolIndex].schedules.length; i++) {
-            if (this.schools[this.selectedSchoolIndex].schedules[i].days.includes(this.currentDate.getDay())) {
+        for (let i = 0; i < schedules.length; i++) {
+            if (schedules[i].days.includes(new Date().getDay())) {
                 return i
             }
         }
