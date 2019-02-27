@@ -25,10 +25,15 @@
         <link href="https://fonts.googleapis.com/css?family=Play|Source+Sans+Pro" rel="stylesheet">
         
     </head>
-    <body onload="{{ page.onload |default: "" }}">
+
+    <body>
+        <noscript>You need to enable JavaScript to run this app.</noscript>
+        <div id="root"></div>
+    </body>
+    <!-- <body onload="{{ page.onload |default: "" }}">
         <p id="flash"></p>
         <div id="page">
             {{ content }}
         </div>
-    </body>
+    </body> -->
 </html>
