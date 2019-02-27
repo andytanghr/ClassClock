@@ -155,7 +155,7 @@ class App extends Component {
      * The standard run loop for updating the time and other time-related information on the site.
      *
      */
-    function update() {
+    update = () => {
         updateTime();
         document.getElementById('time').innerHTML = getCurrentTimeString();
         document.getElementById('date').innerHTML = getCurrentDateString();
@@ -175,7 +175,7 @@ class App extends Component {
     /**
      * mostly useless method to update the currentScheduleIndex and currentClassPeriodIndex
      */
-    function updateVariables() {
+    updateVariables = () => {
         currentScheduleIndex = getCurrentScheduleIndex();
         currentClassPeriodIndex = getCurrentClassPeriodIndex();
     }
@@ -183,7 +183,7 @@ class App extends Component {
     /**
      * Updates labels on the homepage
      */
-    function updateText() {
+    updateText = () => {
 
         if (getCurrentTimeState() !== DAY_OFF_FLAG ) {
             document.getElementById("schedule").innerHTML = "You are viewing the <strong>" + getCurrentScheduleName() + "</strong> schedule"
@@ -247,7 +247,7 @@ class App extends Component {
     /**
      * @returns a flag that represents the current chunk of time categorically
      */
-    function getCurrentTimeState() {
+    getCurrentTimeState = () => {
 
         //there is no schedule that applies today
         if (getCurrentScheduleIndex() <= -1) { return DAY_OFF_FLAG }
@@ -267,28 +267,28 @@ class App extends Component {
     /**
      * @returns the current schedule name or "No School" if there is no school scheduled today
      */
-    function getCurrentScheduleName() {
+    getCurrentScheduleName = () => {
         if (!isNoSchoolDay()) {
             return schools[selectedSchoolIndex].schedules[currentScheduleIndex].name
         } else { return "No School"}
     }
 
     /**
-     * this function checks to see if the currentClassPeriodIndex is valid (greater than -1), indicating that there is currently a scheduled class period happening
+     * this checks to see if the currentClassPeriodIndex is valid (greater than -1), indicating that there is currently a scheduled class period happening
      *
      * @returns a boolean representing if class is in session
      */
-    function classIsInSession() {
+    classIsInSession = () => {
         return (currentClassPeriodIndex >= 0 && !isNoSchoolDay())
         //might later want to add a check to make sure that currentClassPeriodIndex is not greater than the number of classes in the schedule for today
     }
 
     /**
-     * this function checks to see if the current time is between the start of the first scheduled class and the end of the last scheduled class. This indicates that school is currently in session
+     * this checks to see if the current time is between the start of the first scheduled class and the end of the last scheduled class. This indicates that school is currently in session
      *
      * @returns a boolean representing if school is in session
      */
-    function schoolIsInSession() {
+    schoolIsInSession = () => {
 
         return checkTimeRange(
             getCurrentTimeObject(),
@@ -298,22 +298,22 @@ class App extends Component {
     }
 
     /**
-     *  this function checks to see if the currentScheduleIndex is valid (greater than -1), indicating that there is a schedule for the day
+     *  this checks to see if the currentScheduleIndex is valid (greater than -1), indicating that there is a schedule for the day
      *
      * @returns true if there is no schedule that applies to today, false if there is
      */
-    function isNoSchoolDay() {
+    isNoSchoolDay = () => {
         return currentScheduleIndex <= -1;
         //might later want to add a check to make sure that currentScheduleIndex is not greater than the number of schedules
     }
 
 
     /**
-     * This function updates the variables that keep track of the current time and date
+     * This updates the variables that keep track of the current time and date
      */
-    function updateTime() { currentDate = new Date();}
+    updateTime = () => { currentDate = new Date();}
 
-    function getCurrentTimeObject() {
+    getCurrentTimeObject = () => {
     return {hours: currentDate.getHours(), minutes: currentDate.getMinutes(), seconds: currentDate.getSeconds()}
     }
     
@@ -321,21 +321,21 @@ class App extends Component {
     /**
      * @returns the current time as a formatted string
      */
-    function getCurrentTimeString() { return currentDate.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: !use24HourTime }) }
+    getCurrentTimeString = () => { return currentDate.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: !use24HourTime }) }
 
     /**
      * @returns the current date as a formatted string
      */
-    function getCurrentDateString() { 
+    getCurrentDateString = () => { 
     return "on <strong>" + currentDate.toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }) + "</strong>"
     }
 
     /**
-     * this function determines the index of the class period that is currently going on (if any)
+     * this determines the index of the class period that is currently going on (if any)
      *
      * @returns an index for looking up the current class period, or -1 if there is no class happening right now 
      */
-    function getCurrentClassPeriodIndex() {
+    getCurrentClassPeriodIndex = () => {
         if (isNoSchoolDay()) {
             //return immediately if there is no school today
             return -1
@@ -356,7 +356,7 @@ class App extends Component {
     /**
      * @returns the index of the class that started most recently
      */
-    function getMostRecentlyStartedClassIndex() {
+    getMostRecentlyStartedClassIndex = () => {
 
         if (isNoSchoolDay()) {
             //return immediately if there is no school today
@@ -388,11 +388,11 @@ class App extends Component {
 
 
     /**
-     * this function determines the index of the schedule that applies to today (if any)
+     * this determines the index of the schedule that applies to today (if any)
      *
      * @returns an index for looking up the current schedule, or -1 if there is no school today
      */
-    function getCurrentScheduleIndex() {
+    getCurrentScheduleIndex = () => {
         //using for over forEach() because we are breaking out of the loop early
         for (let i = 0; i < schools[selectedSchoolIndex].schedules.length; i++) {
             if (schools[selectedSchoolIndex].schedules[i].days.includes(currentDate.getDay())) {
@@ -411,7 +411,7 @@ class App extends Component {
      * @param {*} time2
      * @returns -1 if time1 is before time2, 0 if they are the same, 1 if time1 is after time2
      */
-    function compareTimes( timeObject1, timeObject2 ) {
+    compareTimes = ( timeObject1, timeObject2 ) => {
 
         let time1 = sanitizeTimeObject(timeObject1)
         let time2 = sanitizeTimeObject(timeObject2)
@@ -439,7 +439,7 @@ class App extends Component {
     }
 
     /**
-     * This function checks if the current time is between the two given times
+     * This checks if the current time is between the two given times
      * This is useful for checking which class period you are currently in or for checking if school is in session.
      * 
      * @param {*} checkTime the time that the check results are returned for
@@ -448,7 +448,7 @@ class App extends Component {
      * 
      * @returns -1 if checkTime is before range, 0 if checkTime is within range, 1 if checkTime is after range
      */
-    function checkTimeRange(checkTime, startTime, endTime) {
+    checkTimeRange = (checkTime, startTime, endTime) => {
 
         let startCheck = compareTimes(checkTime, startTime)
         let endCheck = compareTimes(checkTime, endTime)
@@ -459,17 +459,17 @@ class App extends Component {
 
     }
 
-    function checkClassTime(classPeriod) {
+    checkClassTime = (classPeriod) => {
         return checkTimeRange(getCurrentTimeObject(), classPeriod.startTime, classPeriod.endTime)
     }
 
     /**
-     * this function gets the absolute value of the difference between the given time and the current time
+     * this gets the absolute value of the difference between the given time and the current time
      *
      * @param {*} time the time that you want to calculate the delta to from the current time
      * @returns the absolute value of the difference between the given time and the current time as an object 
      */
-    function getTimeDelta(timeObject1, timeObject2) {
+    getTimeDelta = (timeObject1, timeObject2) => {
         var time1 = new Date(2000, 0, 1,  timeObject1.hours, timeObject1.minutes, timeObject1.seconds);
         var time2 = new Date(2000, 0, 1, timeObject2.hours, timeObject2.minutes, timeObject2.seconds);
         
@@ -479,13 +479,13 @@ class App extends Component {
 
 
     /**
-     * this function returns a new time object that has been checked for inconsistencies
+     * this returns a new time object that has been checked for inconsistencies
      * such as omitted or invalid values and corrected
      *
      * @param {*} timeObject the timeObject to validate
      * @returns a new, validated time object
      */
-    function sanitizeTimeObject(timeObject) {
+    sanitizeTimeObject = (timeObject) => {
         
         //this prevents the original object from being modified
         var newTimeObject = timeObject;
@@ -511,7 +511,7 @@ class App extends Component {
      * @param {*} milliseconds the number of milliseconds to convert
      * @returns a time object
      */
-    function convertMillisecondsToTime(milliseconds) {
+    convertMillisecondsToTime = (milliseconds) => {
         //theres probably a better way to do this using Date()
         time = {hours: 0, minutes:0, seconds:0, milliseconds: 0};
         //convert from milliseconds to H:M:S
@@ -530,7 +530,7 @@ class App extends Component {
      * This fucntion is used for calculating how long until school starts
      * @returns the time to the start of school as a string
      */
-    function getTimeToStartOfSchoolString() {
+    getTimeToStartOfSchoolString = () => {
         if (!classIsInSession() && !isNoSchoolDay() && compareTimes(getCurrentTimeObject(), schools[selectedSchoolIndex].schedules[currentScheduleIndex].classes[0].startTime) == -1) {
             return getTimeStringFromObject(getTimeTo(schools[selectedSchoolIndex].schedules[currentScheduleIndex].classes[0].startTime));
         } else {
@@ -540,12 +540,12 @@ class App extends Component {
 
 
     /**
-     * A shortcut function that inserts the current time into getTimeDelta() for convenience
+     * A shortcut that inserts the current time into getTimeDelta() for convenience
      *
      * @param {*} timeObject
      * @returns
      */
-    function getTimeTo(timeObject) {
+    getTimeTo = (timeObject) => {
         return getTimeDelta(getCurrentTimeObject(), timeObject)
     }
 
@@ -556,7 +556,7 @@ class App extends Component {
      * @param {boolean} [includeSeconds=true] a boolean representing whether seconds should be included in this string (i.e. for a countdown) or not (i.e. for displaying a fixed time)
      * @returns a String in either HH:MM format or HH:MM:SS format
      */
-    function getTimeStringFromObject(timeObject, includeSeconds=true) {
+    getTimeStringFromObject = (timeObject, includeSeconds=true) => {
         if (includeSeconds) {
             //you can really tell how much i dont like to duplicate code here haha
             return getTimeStringFromObject(timeObject, false) + ":" + timeObject.seconds.toString().padStart(2, '0');
@@ -570,7 +570,7 @@ class App extends Component {
      * @param {*} index the index of the class to return the name for
      * @returns returns the class name for the given index or "No Class" if there is no class in session
      */
-    function getClassName(index) {
+    getClassName = (index) => {
         var classes = schools[selectedSchoolIndex].schedules[currentScheduleIndex].classes;
         
         if (index >= 0 && index < classes.length) {
@@ -583,10 +583,10 @@ class App extends Component {
 
 
     /**
-     * this function for populating the table on the schedule page
+     * this for populating the table on the schedule page
      *
      */
-    function populateScheduleTable() {
+    populateScheduleTable = () => {
         // var body = document.getElementsByTagName('body')[0];
         var tbl = document.getElementById("scheduleTable")//createElement('table');
         // tbl.style.width = '100%';
@@ -624,7 +624,7 @@ class App extends Component {
      * @param {*} timeObject the time object to convert to a string
      * @returns the string in either 12 or 24 hour format
      */
-    function getFormattedTimeStringFromObject(timeObject) {
+    getFormattedTimeStringFromObject = (timeObject) => {
         var pmString = "";
 
         //convert to 12 hour if necessary
@@ -646,7 +646,7 @@ class App extends Component {
      * @param {boolean} [unsetDefault=false] the value to return if there was no item at that key. Default: false
      * @returns the value stored at the key or the value of unsetDefault if there was no value previously stored
      */
-    function getLocalStorageBoolean(key, unsetDefault=false) {
+    getLocalStorageBoolean = (key, unsetDefault=false) => {
         if (localStorage.getItem(key) === null) {
             //key is not set
             return unsetDefault
@@ -662,7 +662,7 @@ class App extends Component {
      * @param {*} key the key which the Number is stored under
      * @returns the Number stored at the key if it exists, otherwise undefined.
      */
-    function getLocalStorageIndex(key) {
+    getLocalStorageIndex = (key) => {
         if (localStorage.getItem(key) !== null) {
             return (Number(localStorage.getItem(key)))
         } else {
@@ -678,7 +678,7 @@ class App extends Component {
      * @param {*} [type=FLASH_INFO] the flag of the style to use when displaying the message. Default: INFO
      * @param {number} [timeout=5000] the mumber of milliseconds to wait before the message disappears again. Anything less than 1 will disable the timeout
      */
-    function flashMessage(message, type = FLASH_INFO, timeout = 5000) {
+    flashMessage = (message, type = FLASH_INFO, timeout = 5000) => {
         flash = document.getElementById("flash")
 
         flash.innerHTML = message;
