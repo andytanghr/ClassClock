@@ -116,7 +116,7 @@ class Main extends Component {
 
             case this.OUTSIDE_SCHOOL_HOURS_FLAG:
 
-                if(this.compareTimes(this.getCurrentTimeObject(), this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[0].startTime) === -1) {
+                if(this.compareTimes(Helpers.getTimeObjectFromTime(this.currentDate), this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[0].startTime) === -1) {
                     this.setState({countdownLabel: "School starts in: " });
                     this.setState({timeToEndOfClass: this.getTimeToStartOfSchoolString() });
                 } else {
@@ -199,7 +199,7 @@ class Main extends Component {
     schoolIsInSession = () => {
 
         return Helpers.checkTimeRange(
-            this.getCurrentTimeObject(),
+            Helpers.getTimeObjectFromTime(this.currentDate),
             this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[0].startTime,
             this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes.length-1].endTime
             ) === 0
@@ -210,11 +210,6 @@ class Main extends Component {
      * This updates the variables that keep track of the current time and date
      */
     updateTime = () => { this.currentDate = new Date();}
-
-    getCurrentTimeObject = () => {
-    return {hours: this.currentDate.getHours(), minutes: this.currentDate.getMinutes(), seconds: this.currentDate.getSeconds()}
-    }
-
 
     /**
      * @returns the current time as a formatted string
@@ -267,7 +262,7 @@ class Main extends Component {
 
 
     checkClassTime = (classPeriod) => {
-        return Helpers.checkTimeRange(this.getCurrentTimeObject(), classPeriod.startTime, classPeriod.endTime)
+        return Helpers.checkTimeRange(Helpers.getTimeObjectFromTime(this.currentDate), classPeriod.startTime, classPeriod.endTime)
     }
 
 
@@ -276,7 +271,7 @@ class Main extends Component {
      * @returns the time to the start of school as a string
      */
     getTimeToStartOfSchoolString = () => {
-        if (!this.classIsInSession() && !Helpers.isNoSchoolDay(this.currentScheduleIndex) && this.compareTimes(this.getCurrentTimeObject(), this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[0].startTime) === -1) {
+        if (!this.classIsInSession() && !Helpers.isNoSchoolDay(this.currentScheduleIndex) && this.compareTimes(Helpers.getTimeObjectFromTime(this.currentDate), this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[0].startTime) === -1) {
             return this.getTimeStringFromObject(this.getTimeTo(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[0].startTime));
         } else {
             return "No Class"
@@ -291,7 +286,7 @@ class Main extends Component {
      * @returns
      */
     getTimeTo = (timeObject) => {
-        return Helpers.getTimeDelta(this.getCurrentTimeObject(), timeObject)
+        return Helpers.getTimeDelta(Helpers.getTimeObjectFromTime(this.currentDate), timeObject)
     }
 
 
