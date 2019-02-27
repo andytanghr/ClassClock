@@ -176,7 +176,7 @@ class Main extends Component {
      * @returns the current schedule name or "No School" if there is no school scheduled today
      */
     getCurrentScheduleName = () => {
-        if (!this.isNoSchoolDay()) {
+        if (!this.isNoSchoolDay(this.currentScheduleIndex)) {
             return this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].name
         } else { return "No School"}
     }
@@ -187,7 +187,7 @@ class Main extends Component {
      * @returns a boolean representing if class is in session
      */
     classIsInSession = () => {
-        return (this.currentClassPeriodIndex >= 0 && !this.isNoSchoolDay())
+        return (this.currentClassPeriodIndex >= 0 && !this.isNoSchoolDay(this.currentScheduleIndex))
         //might later want to add a check to make sure that currentClassPeriodIndex is not greater than the number of classes in the schedule for today
     }
 
@@ -210,8 +210,8 @@ class Main extends Component {
      *
      * @returns true if there is no schedule that applies to today, false if there is
      */
-    isNoSchoolDay = () => {
-        return this.currentScheduleIndex <= -1;
+    isNoSchoolDay = (currentScheduleIndex) => {
+        return currentScheduleIndex <= -1;
         //might later want to add a check to make sure that currentScheduleIndex is not greater than the number of schedules
     }
 
@@ -244,7 +244,7 @@ class Main extends Component {
      */
     getMostRecentlyStartedClassIndex = () => {
 
-        if (this.isNoSchoolDay()) {
+        if (this.isNoSchoolDay(this.currentScheduleIndex)) {
             //return immediately if there is no school today
             return -1
         }
@@ -286,7 +286,7 @@ class Main extends Component {
      * @returns the time to the start of school as a string
      */
     getTimeToStartOfSchoolString = () => {
-        if (!this.classIsInSession() && !this.isNoSchoolDay() && this.compareTimes(this.getCurrentTimeObject(), this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[0].startTime) === -1) {
+        if (!this.classIsInSession() && !this.isNoSchoolDay(this.currentScheduleIndex) && this.compareTimes(this.getCurrentTimeObject(), this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[0].startTime) === -1) {
             return this.getTimeStringFromObject(this.getTimeTo(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[0].startTime));
         } else {
             return "No Class"
