@@ -214,6 +214,28 @@ class Helpers {
         }
     }
 
+
+     /**
+     *  converts a time object into a formatted time string based on the user's time format (12/24 hour) preferences
+     *
+     * @param {*} timeObject the time object to convert to a string
+     * @returns the string in either 12 or 24 hour format
+     */
+    static getFormattedTimeStringFromObject = (timeObject) => {
+        var pmString = "";
+        let use24HourTime = this.getLocalStorageBoolean("use24HourTime");
+        //convert to 12 hour if necessary
+        if (!use24HourTime && timeObject.hours > 12) {
+            timeObject.hours -= 12;
+            pmString = " PM";
+
+        } else if (!use24HourTime) {
+            pmString = " AM";
+        }
+
+        return Helpers.getTimeStringFromObject(timeObject, false) + pmString;
+    }
+
     static getTimeObjectFromTime = (currentDate) => {
         return {hours: currentDate.getHours(), minutes: currentDate.getMinutes(), seconds: currentDate.getSeconds()}
     }
