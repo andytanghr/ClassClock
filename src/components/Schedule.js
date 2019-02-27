@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import '../App.css';
+import Helpers from './Helpers';
 
 class Schedule extends Component {
 
@@ -25,36 +26,15 @@ class Schedule extends Component {
         return (
             <table id="scheduleTable" className="centeredInline topSpace">
                 <tbody>
-                    {this.props.schools.map( (classPeriod) => {
+                    {this.props.schools[0].schedules[Helpers.getCurrentScheduleIndex(this.props.schools[0].schedules)].classes.map( (classPeriod) => {
                         return(<tr>
                             <td>{classPeriod.name}</td>
-                            <td>{this.getFormattedTimeStringFromObject(classPeriod.startTime) + " - " + this.getFormattedTimeStringFromObject(classPeriod.endTime)}</td>
+                            <td>{Helpers.getFormattedTimeStringFromObject(classPeriod.startTime) + " - " + Helpers.getFormattedTimeStringFromObject(classPeriod.endTime)}</td>
                         </tr>)
                     })}
                 </tbody>
             </table>
         );
-    }
-
-/**
-     *  converts a time object into a formatted time string based on the user's time format (12/24 hour) preferences
-     *
-     * @param {*} timeObject the time object to convert to a string
-     * @returns the string in either 12 or 24 hour format
-     */
-    getFormattedTimeStringFromObject = (timeObject) => {
-        var pmString = "";
-
-        //convert to 12 hour if necessary
-        if (!this.use24HourTime && timeObject.hours > 12) {
-            timeObject.hours -= 12;
-            pmString = " PM";
-
-        } else if (!this.use24HourTime) {
-            pmString = " AM";
-        }
-
-        return this.getTimeStringFromObject(timeObject, false) + pmString;
     }
 
 
