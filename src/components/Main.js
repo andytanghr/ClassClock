@@ -82,7 +82,7 @@ class Main extends Component {
      */
     updateVariables = () => {
         this.currentScheduleIndex = this.getCurrentScheduleIndex(this.schools[this.selectedSchoolIndex].schedules);
-        this.currentClassPeriodIndex = this.getCurrentClassPeriodIndex();
+        this.currentClassPeriodIndex = this.getCurrentClassPeriodIndex(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex]);
     }
 
     /**
@@ -138,7 +138,7 @@ class Main extends Component {
 
             case this.CLASS_IN_SESSION_FLAG:
             this.setState({countdownLabel:  "...which ends in: " });
-            this.setState({timeToEndOfClass: this.getTimeStringFromObject(this.getTimeTo(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[this.getCurrentClassPeriodIndex()].endTime)) });
+            this.setState({timeToEndOfClass: this.getTimeStringFromObject(this.getTimeTo(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[this.getCurrentClassPeriodIndex(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex])].endTime)) });
 
             this.setState({nextClass: this.getClassName(this.currentClassPeriodIndex+1) });
             this.setState({currentClass: this.getClassName(this.currentClassPeriodIndex) });
@@ -243,17 +243,16 @@ class Main extends Component {
      *
      * @returns an index for looking up the current class period, or -1 if there is no class happening right now 
      */
-    getCurrentClassPeriodIndex = () => {
+    getCurrentClassPeriodIndex = (currentSchedule) => {
         if (this.isNoSchoolDay()) {
             //return immediately if there is no school today
             return -1
         }
 
         //using for over forEach() because we are breaking out of the loop early
-        for (let i = 0; i < this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes.length; i++) {
-            if (this.checkClassTime(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[i]) === 0) {
+        for (let i = 0; i < currentSchedule.classes.length; i++) {
+            if (this.checkClassTime(currentSchedule.classes[i]) === 0) {
                 return i
-                //break;//not sure if this is necessary so I included it anyway
             }
         }
         return -1 //no match found, there is no class currently in session
