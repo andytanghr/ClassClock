@@ -120,6 +120,42 @@ class Helpers {
     }
 
 
+    /**
+     * this determines the index of the class period that is currently going on (if any)
+     *
+     * @returns an index for looking up the current class period, or -1 if there is no class happening right now 
+     */
+    static getCurrentClassPeriodIndex = (currentSchedule) => {
+        if (this.isNoSchoolDay()) {
+            //return immediately if there is no school today
+            return -1
+        }
+
+        //using for over forEach() because we are breaking out of the loop early
+        for (let i = 0; i < currentSchedule.classes.length; i++) {
+            if (this.checkClassTime(currentSchedule.classes[i]) === 0) {
+                return i
+            }
+        }
+        return -1 //no match found, there is no class currently in session
+    }
+
+
+    /**
+     * this determines the index of the schedule that applies to today (if any)
+     *
+     * @returns an index for looking up the current schedule, or -1 if there is no school today
+     */
+    static getCurrentScheduleIndex = (schedules) => {
+        //using for over forEach() because we are breaking out of the loop early
+        for (let i = 0; i < schedules.length; i++) {
+            if (schedules[i].days.includes(new Date().getDay())) {
+                return i
+            }
+        }
+        //if execution reaches here, no schedules were found for today, so it must be a no school day
+        return -1
+    }
     
     /**
      *  Gets a boolean value from HTML5 localStorage

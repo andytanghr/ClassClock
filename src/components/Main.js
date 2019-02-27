@@ -81,8 +81,8 @@ class Main extends Component {
      * mostly useless method to update the currentScheduleIndex and currentClassPeriodIndex
      */
     updateVariables = () => {
-        this.currentScheduleIndex = this.getCurrentScheduleIndex(this.schools[this.selectedSchoolIndex].schedules);
-        this.currentClassPeriodIndex = this.getCurrentClassPeriodIndex(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex]);
+        this.currentScheduleIndex = Helpers.getCurrentScheduleIndex(this.schools[this.selectedSchoolIndex].schedules);
+        this.currentClassPeriodIndex = Helpers.getCurrentClassPeriodIndex(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex]);
     }
 
     /**
@@ -138,7 +138,7 @@ class Main extends Component {
 
             case this.CLASS_IN_SESSION_FLAG:
             this.setState({countdownLabel:  "...which ends in: " });
-            this.setState({timeToEndOfClass: this.getTimeStringFromObject(this.getTimeTo(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[this.getCurrentClassPeriodIndex(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex])].endTime)) });
+            this.setState({timeToEndOfClass: this.getTimeStringFromObject(this.getTimeTo(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[Helpers.getCurrentClassPeriodIndex(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex])].endTime)) });
 
             this.setState({nextClass: this.getClassName(this.currentClassPeriodIndex+1) });
             this.setState({currentClass: this.getClassName(this.currentClassPeriodIndex) });
@@ -158,7 +158,7 @@ class Main extends Component {
     getCurrentTimeState = () => {
 
         //there is no schedule that applies today
-        if (this.getCurrentScheduleIndex(this.schools[this.selectedSchoolIndex].schedules) <= -1) { return this.DAY_OFF_FLAG }
+        if (Helpers.getCurrentScheduleIndex(this.schools[this.selectedSchoolIndex].schedules) <= -1) { return this.DAY_OFF_FLAG }
 
         //it is a school day but it is not school hours
         else if (!this.schoolIsInSession()) { return this.OUTSIDE_SCHOOL_HOURS_FLAG }
@@ -238,27 +238,6 @@ class Main extends Component {
     return ["on", <strong> {this.currentDate.toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }) } </strong>]
     }
 
-    /**
-     * this determines the index of the class period that is currently going on (if any)
-     *
-     * @returns an index for looking up the current class period, or -1 if there is no class happening right now 
-     */
-    getCurrentClassPeriodIndex = (currentSchedule) => {
-        if (this.isNoSchoolDay()) {
-            //return immediately if there is no school today
-            return -1
-        }
-
-        //using for over forEach() because we are breaking out of the loop early
-        for (let i = 0; i < currentSchedule.classes.length; i++) {
-            if (this.checkClassTime(currentSchedule.classes[i]) === 0) {
-                return i
-            }
-        }
-        return -1 //no match found, there is no class currently in session
-    }
-
-
 
     /**
      * @returns the index of the class that started most recently
@@ -294,21 +273,7 @@ class Main extends Component {
     }
 
 
-    /**
-     * this determines the index of the schedule that applies to today (if any)
-     *
-     * @returns an index for looking up the current schedule, or -1 if there is no school today
-     */
-    getCurrentScheduleIndex = (schedules) => {
-        //using for over forEach() because we are breaking out of the loop early
-        for (let i = 0; i < schedules.length; i++) {
-            if (schedules[i].days.includes(new Date().getDay())) {
-                return i
-            }
-        }
-        //if execution reaches here, no schedules were found for today, so it must be a no school day
-        return -1
-    }
+    
 
 
     checkClassTime = (classPeriod) => {
