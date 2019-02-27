@@ -218,6 +218,10 @@ class Helpers {
         return {hours: currentDate.getHours(), minutes: currentDate.getMinutes(), seconds: currentDate.getSeconds()}
     }
 
+    static checkClassTime = (classPeriod, currentDate) => {
+        return this.checkTimeRange(this.getTimeObjectFromTime(currentDate), classPeriod.startTime, classPeriod.endTime)
+    }
+
 }
 
 

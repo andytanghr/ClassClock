@@ -237,10 +237,10 @@ class Main extends Component {
         
         //using for over forEach() because we are breaking out of the loop early
         for (let i = 0; i < this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes.length; i++) {
-            let classPeriodStatus = this.checkClassTime(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[i], this.currentDate)
+            let classPeriodStatus = Helpers.checkClassTime(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[i], this.currentDate)
             let nextClassPeriodStatus;
             if (i+1 < this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes.length) {
-                nextClassPeriodStatus = this.checkClassTime(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[i+1], this.currentDate)
+                nextClassPeriodStatus = Helpers.checkClassTime(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[i+1], this.currentDate)
             }
 
             if (classPeriodStatus === -1) {
@@ -256,15 +256,6 @@ class Main extends Component {
         }
 
     }
-
-
-    
-
-
-    checkClassTime = (classPeriod, currentDate) => {
-        return Helpers.checkTimeRange(Helpers.getTimeObjectFromTime(currentDate), classPeriod.startTime, classPeriod.endTime)
-    }
-
 
     /**
      * This fucntion is used for calculating how long until school starts
