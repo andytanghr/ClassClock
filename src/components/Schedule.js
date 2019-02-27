@@ -3,8 +3,8 @@ import '../App.css';
 
 class Schedule extends Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state={
             schoolName: '',

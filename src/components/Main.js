@@ -4,8 +4,9 @@ import '../App.css';
 
 class Main extends Component {
 
-    constructor() {
-        super();
+    
+    constructor(props) {
+        super(props);
 
         this.state={
             time:'',
