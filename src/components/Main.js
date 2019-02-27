@@ -298,7 +298,7 @@ class Main extends Component {
 
 
     
-/**
+    /**
      *  converts a time object into a formatted time string based on the user's time format (12/24 hour) preferences
      *
      * @param {*} timeObject the time object to convert to a string
@@ -306,13 +306,13 @@ class Main extends Component {
      */
     getFormattedTimeStringFromObject = (timeObject) => {
         var pmString = "";
-
+        let use24HourTime = this.getLocalStorageBoolean("use24HourTime");
         //convert to 12 hour if necessary
-        if (!this.use24HourTime && timeObject.hours > 12) {
+        if (!use24HourTime && timeObject.hours > 12) {
             timeObject.hours -= 12;
             pmString = " PM";
 
-        } else if (!this.use24HourTime) {
+        } else if (!use24HourTime) {
             pmString = " AM";
         }
 
