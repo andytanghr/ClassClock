@@ -133,12 +133,12 @@ class Main extends Component {
 
             this.setState({nextClass: this.getClassName(this.getMostRecentlyStartedClassIndex()+1) });
             this.setState({currentClass: this.schools[this.selectedSchoolIndex].passingPeriodName });
-            this.setState({timeToEndOfClass: this.getTimeStringFromObject(this.getTimeTo(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[this.getMostRecentlyStartedClassIndex()+1].startTime)) });
+            this.setState({timeToEndOfClass: Helpers.getTimeStringFromObject(this.getTimeTo(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[this.getMostRecentlyStartedClassIndex()+1].startTime)) });
                 break;
 
             case this.CLASS_IN_SESSION_FLAG:
             this.setState({countdownLabel:  "...which ends in: " });
-            this.setState({timeToEndOfClass: this.getTimeStringFromObject(this.getTimeTo(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[Helpers.getCurrentClassPeriodIndex(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex], this.currentDate)].endTime)) });
+            this.setState({timeToEndOfClass: Helpers.getTimeStringFromObject(this.getTimeTo(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[Helpers.getCurrentClassPeriodIndex(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex], this.currentDate)].endTime)) });
 
             this.setState({nextClass: this.getClassName(this.currentClassPeriodIndex+1) });
             this.setState({currentClass: this.getClassName(this.currentClassPeriodIndex) });
@@ -263,7 +263,7 @@ class Main extends Component {
      */
     getTimeToStartOfSchoolString = () => {
         if (!this.classIsInSession() && !Helpers.isNoSchoolDay(this.currentScheduleIndex) && this.compareTimes(Helpers.getTimeObjectFromTime(this.currentDate), this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[0].startTime) === -1) {
-            return this.getTimeStringFromObject(this.getTimeTo(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[0].startTime));
+            return Helpers.getTimeStringFromObject(this.getTimeTo(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[0].startTime));
         } else {
             return "No Class"
         }
@@ -316,7 +316,7 @@ class Main extends Component {
             pmString = " AM";
         }
 
-        return this.getTimeStringFromObject(timeObject, false) + pmString;
+        return Helpers.getTimeStringFromObject(timeObject, false) + pmString;
     }
 
     /**
