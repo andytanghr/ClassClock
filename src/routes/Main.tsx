@@ -323,39 +323,39 @@ class Main extends Component<{schools: School[]}, IndexState> {
      * @param {*} [type=FLASH_INFO] the flag of the style to use when displaying the message. Default: INFO
      * @param {number} [timeout=5000] the mumber of milliseconds to wait before the message disappears again. Anything less than 1 will disable the timeout
      */
-    flashMessage = (message, type = this.FLASH_INFO, timeout = 5000) => {
-        let flash = document.getElementById("flash")
+    // flashMessage = (message:string, type = this.FLASH_INFO, timeout = 5000) => {
+    //     let flash = document.getElementById("flash")
 
-        flash.innerHTML = message;
-        // flash.style.visibility = "visible";
-        flash.style.display = "normal";
+    //     flash.innerHTML = message;
+    //     // flash.style.visibility = "visible";
+    //     flash.style.display = "normal";
 
-        switch (type) {
-            case this.FLASH_SUCCESS:
-                flash.className = "success"; 
-                break;
+    //     switch (type) {
+    //         case this.FLASH_SUCCESS:
+    //             flash.className = "success"; 
+    //             break;
 
-            case this.FLASH_WARN:
-                flash.className = "warning";
-                break;
+    //         case this.FLASH_WARN:
+    //             flash.className = "warning";
+    //             break;
                 
-            case this.FLASH_DANGER:
-                flash.className = "danger";
-                break;
+    //         case this.FLASH_DANGER:
+    //             flash.className = "danger";
+    //             break;
 
-            default: //FLASH_INFO
-                flash.className = "info";
-        }
-        // maybe animate down or fade in
+    //         default: //FLASH_INFO
+    //             flash.className = "info";
+    //     }
+    //     // maybe animate down or fade in
 
-        if (timeout > 0) {
-            setTimeout( function remove() {
-                // flash.style.visibility = "hidden";
-                flash.style.display = "none";
-            }, timeout)
-        }
+    //     if (timeout > 0) {
+    //         setTimeout( function remove() {
+    //             // flash.style.visibility = "hidden";
+    //             flash.style.display = "none";
+    //         }, timeout)
+    //     }
 
-    }
+    // }
 
 
     render() {
