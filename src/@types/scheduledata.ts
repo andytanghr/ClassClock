@@ -1,14 +1,14 @@
 export interface School {
-    "fullName": string;
-    "timeZone": string;
-    "schedules": Schedule[];
-    "passingPeriodName": string;
+    fullName: string;
+    timeZone: string;
+    schedules: Schedule[];
+    passingPeriodName: string;
 }
 
 export interface Schedule {
-    "name": string;
-    "days": number[];
-    "classes": Period[];
+    name: string;
+    days: number[];
+    classes: Period[];
 }
 
 export interface Period {
