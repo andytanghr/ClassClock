@@ -116,7 +116,7 @@ class Main extends Component {
 
             case this.OUTSIDE_SCHOOL_HOURS_FLAG:
 
-                if(this.compareTimes(Helpers.getTimeObjectFromTime(this.currentDate), this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[0].startTime) === -1) {
+                if(Helpers.compareTimes(Helpers.getTimeObjectFromTime(this.currentDate), this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[0].startTime) === -1) {
                     this.setState({countdownLabel: "School starts in: " });
                     this.setState({timeToEndOfClass: this.getTimeToStartOfSchoolString() });
                 } else {
@@ -262,7 +262,7 @@ class Main extends Component {
      * @returns the time to the start of school as a string
      */
     getTimeToStartOfSchoolString = () => {
-        if (!this.classIsInSession() && !Helpers.isNoSchoolDay(this.currentScheduleIndex) && this.compareTimes(Helpers.getTimeObjectFromTime(this.currentDate), this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[0].startTime) === -1) {
+        if (!this.classIsInSession() && !Helpers.isNoSchoolDay(this.currentScheduleIndex) && Helpers.compareTimes(Helpers.getTimeObjectFromTime(this.currentDate), this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[0].startTime) === -1) {
             return Helpers.getTimeStringFromObject(this.getTimeTo(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[0].startTime));
         } else {
             return "No Class"
