@@ -211,7 +211,7 @@ class Helpers {
      * @returns a String in either HH:MM format or HH:MM:SS format
      */
     static getTimeStringFromObject = (timeObject:Time, includeSeconds=true):string => {
-        if (includeSeconds) {
+        if (typeof timeObject.seconds !== "undefined" && includeSeconds) {
             //you can really tell how much i dont like to duplicate code here haha
             return Helpers.getTimeStringFromObject(timeObject, false) + ":" + timeObject.seconds.toString().padStart(2, '0');
         } else {
