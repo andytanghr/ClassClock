@@ -1,10 +1,17 @@
 import React, { Component } from 'react';
 import '../App.css';
 import Helpers from '../utils/Helpers';
+import { School } from '../@types/scheduledata';
 
-class Schedule extends Component {
+interface IndexState {
+    schoolName?: string
+    scheduleDisplay?: string
 
-    constructor(props) {
+  }
+
+class Schedule extends Component<{schools: School[]}, IndexState> {
+
+    constructor(props:any) {
         super(props);
 
         this.state={

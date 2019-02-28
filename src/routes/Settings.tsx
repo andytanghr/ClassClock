@@ -2,10 +2,14 @@ import React, { Component } from 'react';
 import '../App.css';
 import Helpers from '../utils/Helpers';
 
-class Settings extends Component {
+interface IndexState {
+    use24HourTime?: boolean
+  }
 
-    constructor() {
-        super();
+class Settings extends Component<{}, IndexState> {
+
+    constructor(props: any) {
+        super(props);
 
         this.state={
             use24HourTime: Helpers.getLocalStorageBoolean("use24HourTime")
@@ -15,7 +19,7 @@ class Settings extends Component {
     }
 
     
-    updateSettings = (event) => {
+    updateSettings = (event:any) => {
         console.log(event)
         let val = event.target.checked;
         console.log(val);

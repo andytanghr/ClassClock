@@ -1,3 +1,6 @@
+import { Time, Period } from "../@types/scheduledata";
+import Schedule from "../routes/Schedule";
+
 class Helpers {
     /**
      * Compares the hours and minutes of two times, aassuming all times occoured on the same day
@@ -6,7 +9,7 @@ class Helpers {
      * @param {*} time2
      * @returns -1 if time1 is before time2, 0 if they are the same, 1 if time1 is after time2
      */
-    static compareTimes = ( timeObject1, timeObject2 ) => {
+    static compareTimes = ( timeObject1:Time, timeObject2:Time ) => {
 
         let time1 = this.sanitizeTimeObject(timeObject1)
         let time2 = this.sanitizeTimeObject(timeObject2)
@@ -43,7 +46,7 @@ class Helpers {
      * 
      * @returns -1 if checkTime is before range, 0 if checkTime is within range, 1 if checkTime is after range
      */
-    static checkTimeRange = (checkTime, startTime, endTime) => {
+    static checkTimeRange = (checkTime:Time, startTime:Time, endTime:Time) => {
 
         let startCheck = this.compareTimes(checkTime, startTime)
         let endCheck = this.compareTimes(checkTime, endTime)
@@ -62,7 +65,7 @@ class Helpers {
      * @param {*} time the time that you want to calculate the delta to from the current time
      * @returns the absolute value of the difference between the given time and the current time as an object 
      */
-    static getTimeDelta = (timeObject1, timeObject2) => {
+    static getTimeDelta = (timeObject1:Time, timeObject2:Time) => {
         var time1 = new Date(2000, 0, 1,  timeObject1.hours, timeObject1.minutes, timeObject1.seconds);
         var time2 = new Date(2000, 0, 1, timeObject2.hours, timeObject2.minutes, timeObject2.seconds);
         
@@ -78,7 +81,7 @@ class Helpers {
      * @param {*} timeObject the timeObject to validate
      * @returns a new, validated time object
      */
-    static sanitizeTimeObject = (timeObject) => {
+    static sanitizeTimeObject = (timeObject:Time) => {
         
         //this prevents the original object from being modified
         var newTimeObject = timeObject;
@@ -104,7 +107,7 @@ class Helpers {
      * @param {*} milliseconds the number of milliseconds to convert
      * @returns a time object
      */
-    static convertMillisecondsToTime = (milliseconds) => {
+    static convertMillisecondsToTime = (milliseconds:number) => {
         //theres probably a better way to do this using Date()
         let time = {hours: 0, minutes:0, seconds:0, milliseconds: 0};
         //convert from milliseconds to H:M:S
@@ -125,7 +128,7 @@ class Helpers {
      *
      * @returns an index for looking up the current class period, or -1 if there is no class happening right now 
      */
-    static getCurrentClassPeriodIndex = (currentSchedule, currentDate) => {
+    static getCurrentClassPeriodIndex = (currentSchedule:Schedule, currentDate:Date) => {
         if (this.isNoSchoolDay()) {
             //return immediately if there is no school today
             return -1
@@ -146,7 +149,7 @@ class Helpers {
      *
      * @returns true if there is no schedule that applies to today, false if there is
      */
-    static isNoSchoolDay = (currentScheduleIndex) => {
+    static isNoSchoolDay = (currentScheduleIndex:number) => {
         return currentScheduleIndex <= -1;
         //might later want to add a check to make sure that currentScheduleIndex is not greater than the number of schedules
     }
@@ -156,7 +159,7 @@ class Helpers {
      *
      * @returns an index for looking up the current schedule, or -1 if there is no school today
      */
-    static getCurrentScheduleIndex = (schedules) => {
+    static getCurrentScheduleIndex = (schedules:Schedule[]) => {
         //using for over forEach() because we are breaking out of the loop early
         for (let i = 0; i < schedules.length; i++) {
             if (schedules[i].days.includes(new Date().getDay())) {
@@ -174,7 +177,7 @@ class Helpers {
      * @param {boolean} [unsetDefault=false] the value to return if there was no item at that key. Default: false
      * @returns the value stored at the key or the value of unsetDefault if there was no value previously stored
      */
-    static getLocalStorageBoolean = (key, unsetDefault=false) => {
+    static getLocalStorageBoolean = (key:string, unsetDefault=false) => {
         if (localStorage.getItem(key) === null) {
             //key is not set
             return unsetDefault
@@ -190,7 +193,7 @@ class Helpers {
      * @param {*} key the key which the Number is stored under
      * @returns the Number stored at the key if it exists, otherwise undefined.
      */
-    static getLocalStorageIndex = (key) => {
+    static getLocalStorageIndex = (key:string) => {
         if (localStorage.getItem(key) !== null) {
             return (Number(localStorage.getItem(key)))
         } else {
@@ -205,7 +208,7 @@ class Helpers {
      * @param {boolean} [includeSeconds=true] a boolean representing whether seconds should be included in this string (i.e. for a countdown) or not (i.e. for displaying a fixed time)
      * @returns a String in either HH:MM format or HH:MM:SS format
      */
-    static getTimeStringFromObject = (timeObject, includeSeconds=true) => {
+    static getTimeStringFromObject = (timeObject:Time, includeSeconds=true):string => {
         if (includeSeconds) {
             //you can really tell how much i dont like to duplicate code here haha
             return this.getTimeStringFromObject(timeObject, false) + ":" + timeObject.seconds.toString().padStart(2, '0');
@@ -221,7 +224,7 @@ class Helpers {
      * @param {*} timeObject the time object to convert to a string
      * @returns the string in either 12 or 24 hour format
      */
-    static getFormattedTimeStringFromObject = (timeObject) => {
+    static getFormattedTimeStringFromObject = (timeObject:Time) => {
         var pmString = "";
         let use24HourTime = this.getLocalStorageBoolean("use24HourTime");
         //convert to 12 hour if necessary
@@ -236,11 +239,11 @@ class Helpers {
         return Helpers.getTimeStringFromObject(timeObject, false) + pmString;
     }
 
-    static getTimeObjectFromTime = (currentDate) => {
+    static getTimeObjectFromTime = (currentDate:Date) => {
         return {hours: currentDate.getHours(), minutes: currentDate.getMinutes(), seconds: currentDate.getSeconds()}
     }
 
-    static checkClassTime = (classPeriod, currentDate) => {
+    static checkClassTime = (classPeriod:Period, currentDate:Date) => {
         return this.checkTimeRange(this.getTimeObjectFromTime(currentDate), classPeriod.startTime, classPeriod.endTime)
     }
 

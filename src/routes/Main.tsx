@@ -1,11 +1,28 @@
 import React, { Component } from 'react';
 import Helpers from "../utils/Helpers";
 import '../App.css';
+import { School, Time } from '../@types/scheduledata';
 
-class Main extends Component {
+interface IndexState {
+    time?: string
+    date?: any
+    scheduleInfoVis?: string
+    schedule?: any
+    viewScheduleLinkDispl?: string
+    selectedSchoolDisplay?: any
+    hideLabels?: boolean
+    countdownLabel?: string
+    nextClass?: string
+    currentClass?: string
+    timeToEndOfClass?: string
+
+
+  }
+
+class Main extends Component<{schools: School[]}, IndexState> {
 
     
-    constructor(props) {
+    constructor(props: any) {
         super(props);
 
         this.state={
@@ -21,6 +38,7 @@ class Main extends Component {
         }
 
         this.use24HourTime = Helpers.getLocalStorageBoolean("use24HourTime", false);
+        this.currentDate = new Date();
 
         this.schools = this.props.schools;
         this.update();
@@ -36,7 +54,7 @@ class Main extends Component {
     FLASH_WARN = "WARNING"
     FLASH_DANGER = "DANGER"
 
-    currentDate;
+    currentDate: Date;
 
     currentClassPeriodIndex = -1;
     //nextClassPeriodIndex
@@ -45,11 +63,11 @@ class Main extends Component {
     selectedSchoolIndex = 0;
 
 
-    use24HourTime;
+    use24HourTime: boolean;
 
 
 
-    schools;
+    schools: School[];
 
 
 
@@ -175,7 +193,7 @@ class Main extends Component {
     /**
      * @returns the current schedule name or "No School" if there is no school scheduled today
      */
-    getCurrentScheduleName = () => {
+    getCurrentScheduleName = ():string => {
         if (!Helpers.isNoSchoolDay(this.currentScheduleIndex)) {
             return this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].name
         } else { return "No School"}
@@ -186,7 +204,7 @@ class Main extends Component {
      *
      * @returns a boolean representing if class is in session
      */
-    classIsInSession = () => {
+    classIsInSession = ():boolean => {
         return (this.currentClassPeriodIndex >= 0 && !Helpers.isNoSchoolDay(this.currentScheduleIndex))
         //might later want to add a check to make sure that currentClassPeriodIndex is not greater than the number of classes in the schedule for today
     }
@@ -196,7 +214,7 @@ class Main extends Component {
      *
      * @returns a boolean representing if school is in session
      */
-    schoolIsInSession = () => {
+    schoolIsInSession = ():boolean => {
 
         return Helpers.checkTimeRange(
             Helpers.getTimeObjectFromTime(this.currentDate),
@@ -214,12 +232,12 @@ class Main extends Component {
     /**
      * @returns the current time as a formatted string
      */
-    getCurrentTimeString = () => { return this.currentDate.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: !this.use24HourTime }) }
+    getCurrentTimeString = ():string => { return this.currentDate.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: !this.use24HourTime }) }
 
     /**
      * @returns the current date as a formatted string
      */
-    getCurrentDateString = () => { 
+    getCurrentDateString = ():any => { 
     return ["on", <strong> {this.currentDate.toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }) } </strong>]
     }
 
@@ -227,7 +245,7 @@ class Main extends Component {
     /**
      * @returns the index of the class that started most recently
      */
-    getMostRecentlyStartedClassIndex = () => {
+    getMostRecentlyStartedClassIndex = ():number => {
 
         if (Helpers.isNoSchoolDay(this.currentScheduleIndex)) {
             //return immediately if there is no school today
@@ -261,7 +279,7 @@ class Main extends Component {
      * This fucntion is used for calculating how long until school starts
      * @returns the time to the start of school as a string
      */
-    getTimeToStartOfSchoolString = () => {
+    getTimeToStartOfSchoolString = ():string => {
         if (!this.classIsInSession() && !Helpers.isNoSchoolDay(this.currentScheduleIndex) && Helpers.compareTimes(Helpers.getTimeObjectFromTime(this.currentDate), this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[0].startTime) === -1) {
             return Helpers.getTimeStringFromObject(this.getTimeTo(this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes[0].startTime));
         } else {
@@ -276,7 +294,7 @@ class Main extends Component {
      * @param {*} timeObject
      * @returns
      */
-    getTimeTo = (timeObject) => {
+    getTimeTo = (timeObject:Time):Time => {
         return Helpers.getTimeDelta(Helpers.getTimeObjectFromTime(this.currentDate), timeObject)
     }
 
@@ -286,7 +304,7 @@ class Main extends Component {
      * @param {*} index the index of the class to return the name for
      * @returns returns the class name for the given index or "No Class" if there is no class in session
      */
-    getClassName = (index) => {
+    getClassName = (index:number):string => {
         var classes = this.schools[this.selectedSchoolIndex].schedules[this.currentScheduleIndex].classes;
         
         if (index >= 0 && index < classes.length) {

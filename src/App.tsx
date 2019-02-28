@@ -138,7 +138,7 @@ class App extends Component {
     ];
 
 
-    mySchedule = ( props ) => {
+    mySchedule = ( props: any ) => {
         return (
           <Schedule 
             schools={this.schools}
@@ -147,7 +147,7 @@ class App extends Component {
         );
       }
 
-      mainApp = ( props ) => {
+      mainApp = ( props: any ) => {
         return (
           <Main 
             schools={this.schools}
