@@ -1,5 +1,4 @@
-import { Time, Period } from "../@types/scheduledata";
-import Schedule from "../routes/Schedule";
+import { Schedule, Time, Period } from "../@types/scheduledata";
 
 class Helpers {
     /**
