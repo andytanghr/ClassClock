@@ -17,7 +17,7 @@ class Helpers {
 
         let hoursDiff = time1.hours - time2.hours;
         let minutesDiff = time1.minutes - time2.minutes;
-        let secondsDiff = time1.seconds - time2.seconds;
+        let secondsDiff= (typeof time1.seconds !== "undefined" && typeof time2.seconds !== "undefined")? time1.seconds - time2.seconds : null
 
         if (hoursDiff < 0) {return -1}
         else if (hoursDiff > 0) {return 1}
@@ -29,8 +29,10 @@ class Helpers {
 
         //hours and minutes are the same if execution reaches here
 
-        if (secondsDiff < 0) {return -1}
-        else if (secondsDiff > 0) {return 1}
+        if (secondsDiff !== null) {
+            if (secondsDiff < 0) {return -1}
+            else if (secondsDiff > 0) {return 1}
+        }
 
         //hours, minutes, and seconds are the same if execution reaches here
         return 0
