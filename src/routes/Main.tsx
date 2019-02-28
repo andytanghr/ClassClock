@@ -89,7 +89,7 @@ class Main extends Component<{schools: School[]}, IndexState> {
             this.setState({scheduleInfoVis: "visible"});
             
         } else {
-            this.setstate({scheduleInfoVis: "hidden"});
+            this.setState({scheduleInfoVis: "hidden"});
         }
         
         setTimeout(this.update, 500);
@@ -120,7 +120,7 @@ class Main extends Component<{schools: School[]}, IndexState> {
         switch (this.getCurrentTimeState()) {
             case this.DAY_OFF_FLAG:
             this.setState({schedule: ["There's ", <strong>no class</strong>, " today!" ]});
-            this.setState({viewScheduleLink: "none" });
+            this.setState({viewScheduleLinkDispl: "none" });
 
                 
             this.setState({hideLabels: true});
@@ -272,7 +272,7 @@ class Main extends Component<{schools: School[]}, IndexState> {
                 return i
             }
         }
-
+        return -1
     }
 
     /**

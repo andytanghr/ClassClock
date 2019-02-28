@@ -11,8 +11,8 @@ class Helpers {
      */
     static compareTimes = ( timeObject1:Time, timeObject2:Time ) => {
 
-        let time1 = this.sanitizeTimeObject(timeObject1)
-        let time2 = this.sanitizeTimeObject(timeObject2)
+        let time1 = Helpers.sanitizeTimeObject(timeObject1)
+        let time2 = Helpers.sanitizeTimeObject(timeObject2)
 
 
         let hoursDiff = time1.hours - time2.hours;
@@ -48,8 +48,8 @@ class Helpers {
      */
     static checkTimeRange = (checkTime:Time, startTime:Time, endTime:Time) => {
 
-        let startCheck = this.compareTimes(checkTime, startTime)
-        let endCheck = this.compareTimes(checkTime, endTime)
+        let startCheck = Helpers.compareTimes(checkTime, startTime)
+        let endCheck = Helpers.compareTimes(checkTime, endTime)
 
         if (startCheck === -1) { return -1 }
         else if ( startCheck >= 0 && endCheck <= 0) { return 0 }
@@ -70,7 +70,7 @@ class Helpers {
         var time2 = new Date(2000, 0, 1, timeObject2.hours, timeObject2.minutes, timeObject2.seconds);
         
                                                     //order doesnt matter
-        return this.convertMillisecondsToTime(Math.abs(time1 - time2));
+        return Helpers.convertMillisecondsToTime(Math.abs(time1 - time2));
     }
 
 
@@ -129,14 +129,14 @@ class Helpers {
      * @returns an index for looking up the current class period, or -1 if there is no class happening right now 
      */
     static getCurrentClassPeriodIndex = (currentSchedule:Schedule, currentDate:Date) => {
-        if (this.isNoSchoolDay()) {
+        if (Helpers.isNoSchoolDay(currentSchedule)) {
             //return immediately if there is no school today
             return -1
         }
 
         //using for over forEach() because we are breaking out of the loop early
         for (let i = 0; i < currentSchedule.classes.length; i++) {
-            if (this.checkClassTime(currentSchedule.classes[i], currentDate) === 0) {
+            if (Helpers.checkClassTime(currentSchedule.classes[i], currentDate) === 0) {
                 return i
             }
         }
@@ -211,7 +211,7 @@ class Helpers {
     static getTimeStringFromObject = (timeObject:Time, includeSeconds=true):string => {
         if (includeSeconds) {
             //you can really tell how much i dont like to duplicate code here haha
-            return this.getTimeStringFromObject(timeObject, false) + ":" + timeObject.seconds.toString().padStart(2, '0');
+            return Helpers.getTimeStringFromObject(timeObject, false) + ":" + timeObject.seconds.toString().padStart(2, '0');
         } else {
             return timeObject.hours.toString().padStart(2, '0') + ":" + timeObject.minutes.toString().padStart(2, '0')
         }
@@ -226,7 +226,7 @@ class Helpers {
      */
     static getFormattedTimeStringFromObject = (timeObject:Time) => {
         var pmString = "";
-        let use24HourTime = this.getLocalStorageBoolean("use24HourTime");
+        let use24HourTime = Helpers.getLocalStorageBoolean("use24HourTime");
         //convert to 12 hour if necessary
         if (!use24HourTime && timeObject.hours > 12) {
             timeObject.hours -= 12;
@@ -244,7 +244,7 @@ class Helpers {
     }
 
     static checkClassTime = (classPeriod:Period, currentDate:Date) => {
-        return this.checkTimeRange(this.getTimeObjectFromTime(currentDate), classPeriod.startTime, classPeriod.endTime)
+        return Helpers.checkTimeRange(Helpers.getTimeObjectFromTime(currentDate), classPeriod.startTime, classPeriod.endTime)
     }
 
 }
