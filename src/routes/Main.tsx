@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Helpers from "../utils/Helpers";
 import '../App.css';
+import { TimeStates } from "../utils/enums"
 import { School, Time } from '../@types/scheduledata';
 
 interface IndexState {
@@ -43,16 +44,6 @@ class Main extends Component<{school: School}, IndexState> {
         this.school = this.props.school;
         this.update();
     }
-
-    DAY_OFF_FLAG = "day off";
-    OUTSIDE_SCHOOL_HOURS_FLAG = "outside school hours";
-    SCHOOL_IN_CLASS_OUT_FLAG = "school is in session, but class is not";
-    CLASS_IN_SESSION_FLAG = "class is in session"
-
-    FLASH_SUCCESS = "SUCCESS"
-    FLASH_INFO = "INFO"
-    FLASH_WARN = "WARNING"
-    FLASH_DANGER = "DANGER"
 
     currentDate: Date;
 
@@ -108,7 +99,7 @@ class Main extends Component<{school: School}, IndexState> {
      */
     updateText = () => {
 
-        if (this.getCurrentTimeState() !== this.DAY_OFF_FLAG ) {
+        if (this.getCurrentTimeState() !== TimeStates.DAY_OFF ) {
 
             this.setState({schedule: ["You are viewing the ", <strong>{this.getCurrentScheduleName()}</strong>, " schedule"]});
             this.setState({selectedSchoolDisplay: ["from ", <strong>{this.school.fullName}</strong> ,"."]});
@@ -118,7 +109,7 @@ class Main extends Component<{school: School}, IndexState> {
 
 
         switch (this.getCurrentTimeState()) {
-            case this.DAY_OFF_FLAG:
+            case TimeStates.DAY_OFF:
             this.setState({schedule: ["There's ", <strong>no class</strong>, " today!" ]});
             this.setState({viewScheduleLinkDispl: "none" });
 
@@ -132,7 +123,7 @@ class Main extends Component<{school: School}, IndexState> {
                 
                 break;
 
-            case this.OUTSIDE_SCHOOL_HOURS_FLAG:
+            case TimeStates.OUTSIDE_SCHOOL_HOURS:
 
                 if(Helpers.compareTimes(Helpers.getTimeObjectFromTime(this.currentDate), this.school.schedules[this.currentScheduleIndex].classes[0].startTime) === -1) {
                     this.setState({countdownLabel: "School starts in: " });
@@ -146,7 +137,7 @@ class Main extends Component<{school: School}, IndexState> {
                 
                 break;
 
-            case this.SCHOOL_IN_CLASS_OUT_FLAG:
+            case TimeStates.SCHOOL_IN_CLASS_OUT:
                 
 
             this.setState({nextClass: this.getClassName(this.getMostRecentlyStartedClassIndex()+1) });
@@ -154,7 +145,7 @@ class Main extends Component<{school: School}, IndexState> {
             this.setState({timeToEndOfClass: Helpers.getTimeStringFromObject(this.getTimeTo(this.school.schedules[this.currentScheduleIndex].classes[this.getMostRecentlyStartedClassIndex()+1].startTime)) });
                 break;
 
-            case this.CLASS_IN_SESSION_FLAG:
+            case TimeStates.CLASS_IN_SESSION:
             this.setState({countdownLabel:  "...which ends in: " });
             this.setState({timeToEndOfClass: Helpers.getTimeStringFromObject(this.getTimeTo(this.school.schedules[this.currentScheduleIndex].classes[Helpers.getCurrentClassPeriodIndex(this.school.schedules[this.currentScheduleIndex], this.currentDate)].endTime)) });
 
@@ -176,16 +167,16 @@ class Main extends Component<{school: School}, IndexState> {
     getCurrentTimeState = () => {
 
         //there is no schedule that applies today
-        if (Helpers.getCurrentScheduleIndex(this.school.schedules) <= -1) { return this.DAY_OFF_FLAG }
+        if (Helpers.getCurrentScheduleIndex(this.school.schedules) <= -1) { return TimeStates.DAY_OFF }
 
         //it is a school day but it is not school hours
-        else if (!this.schoolIsInSession()) { return this.OUTSIDE_SCHOOL_HOURS_FLAG }
+        else if (!this.schoolIsInSession()) { return TimeStates.OUTSIDE_SCHOOL_HOURS }
         
         //the current time lies between the start of the first schedules class and the end of the last
-        else if (this.schoolIsInSession() && !this.classIsInSession()) { return this.SCHOOL_IN_CLASS_OUT_FLAG }
+        else if (this.schoolIsInSession() && !this.classIsInSession()) { return TimeStates.SCHOOL_IN_CLASS_OUT }
 
         //the current time lies within a scheduled class period
-        else if (this.classIsInSession()) { return this.CLASS_IN_SESSION_FLAG }
+        else if (this.classIsInSession()) { return TimeStates.CLASS_IN_SESSION }
 
 
     }
