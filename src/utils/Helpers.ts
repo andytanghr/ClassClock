@@ -68,11 +68,11 @@ class Helpers {
      * @returns the absolute value of the difference between the given time and the current time as an object 
      */
     static getTimeDelta = (timeObject1:Time, timeObject2:Time) => {
-        var time1 = new Date(2000, 0, 1,  timeObject1.hours, timeObject1.minutes, timeObject1.seconds);
-        var time2 = new Date(2000, 0, 1, timeObject2.hours, timeObject2.minutes, timeObject2.seconds);
-        
+                                //arbitrary date. doesnt matter what it is as long as they match
+        var time1ms = new Date(2000, 0, 1,  timeObject1.hours, timeObject1.minutes, timeObject1.seconds).getTime();
+        var time2ms = new Date(2000, 0, 1, timeObject2.hours, timeObject2.minutes, timeObject2.seconds).getTime();
                                                     //order doesnt matter
-        return Helpers.convertMillisecondsToTime(Math.abs(time1 - time2));
+        return Helpers.convertMillisecondsToTime(Math.abs(time1ms - time2ms));
     }
 
 
