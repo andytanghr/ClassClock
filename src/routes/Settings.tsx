@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import '../App.css';
+import Helpers from '../utils/Helpers';
 
 class Settings extends Component {
 
@@ -7,7 +8,7 @@ class Settings extends Component {
         super();
 
         this.state={
-            use24HourTime: this.getLocalStorageBoolean("use24HourTime")
+            use24HourTime: Helpers.getLocalStorageBoolean("use24HourTime")
 
         }
 
@@ -20,24 +21,6 @@ class Settings extends Component {
         console.log(val);
         localStorage.setItem("use24HourTime", val);
         this.setState({use24HourTime: val});
-    }
-
-  
-    /**
-     *  Gets a boolean value from HTML5 localStorage
-     *
-     * @param {*} key the key which the value is stored under
-     * @param {boolean} [unsetDefault=false] the value to return if there was no item at that key. Default: false
-     * @returns the value stored at the key or the value of unsetDefault if there was no value previously stored
-     */
-    getLocalStorageBoolean = (key, unsetDefault=false) => {
-        if (localStorage.getItem(key) === null) {
-            //key is not set
-            return unsetDefault
-        } else {
-            //this is a better way to to convert the string from localStorage into a boolean for checkbox.checked. https://stackoverflow.com/a/264037
-            return (localStorage.getItem(key) === "true")
-        }
     }
 
     render() {
