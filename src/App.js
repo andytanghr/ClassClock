@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import './App.css';
-import Main from './components/Main';
-import Settings from './components/Settings';
-import Schedule from './components/Schedule';
+import Main from './routes/Main';
+import Settings from './routes/Settings';
+import Schedule from './routes/Schedule';
 
 class App extends Component {
 
