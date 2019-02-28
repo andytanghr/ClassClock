@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Helpers from "./Helpers";
+import Helpers from "../utils/Helpers";
 import '../App.css';
 
 class Main extends Component {

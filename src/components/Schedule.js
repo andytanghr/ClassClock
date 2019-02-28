@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import '../App.css';
-import Helpers from './Helpers';
+import Helpers from '../utils/Helpers';
 
 class Schedule extends Component {
 
