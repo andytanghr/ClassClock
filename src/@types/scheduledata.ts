@@ -1,5 +1,6 @@
 export interface School {
     fullName: string;
+    shortName: string;
     timeZone: string;
     schedules: Schedule[];
     passingPeriodName: string;
