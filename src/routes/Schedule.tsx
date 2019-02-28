@@ -9,14 +9,14 @@ interface IndexState {
 
   }
 
-class Schedule extends Component<{schools: School[]}, IndexState> {
+class Schedule extends Component<{school: School}, IndexState> {
 
     constructor(props:any) {
         super(props);
 
         this.state={
-            schoolName: this.props.schools[0].fullName,
-            scheduleDisplay: this.props.schools[0].schedules[Helpers.getCurrentScheduleIndex(this.props.schools[0].schedules)].name + " schedule"
+            schoolName: this.props.school.fullName,
+            scheduleDisplay: this.props.school.schedules[Helpers.getCurrentScheduleIndex(this.props.school.schedules)].name + " schedule"
 
         }
 
@@ -33,7 +33,7 @@ class Schedule extends Component<{schools: School[]}, IndexState> {
         return (
             <table id="scheduleTable" className="centeredInline topSpace">
                 <tbody>
-                    {this.props.schools[0].schedules[Helpers.getCurrentScheduleIndex(this.props.schools[0].schedules)].classes.map( (classPeriod) => {
+                    {this.props.school.schedules[Helpers.getCurrentScheduleIndex(this.props.school.schedules)].classes.map( (classPeriod) => {
                         return(<tr>
                             <td>{classPeriod.name}</td>
                             <td>{Helpers.getFormattedTimeStringFromObject(classPeriod.startTime) + " - " + Helpers.getFormattedTimeStringFromObject(classPeriod.endTime)}</td>

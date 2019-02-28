@@ -4,6 +4,7 @@ import './App.css';
 import Main from './routes/Main';
 import Settings from './routes/Settings';
 import Schedule from './routes/Schedule';
+import { School } from './@types/scheduledata';
 
 class App extends Component {
 
@@ -13,12 +14,13 @@ class App extends Component {
 
     // }
 
-    schools = [
+    school: School =
         {
         fullName: "Lake Oswego High School",
         shortName: "LOHS",
         passingPeriodName: "Passing Period", //the name to use for time gaps in the schedule between classes
         //order is as is on the school website, although it doesnt matter.
+        timeZone:"",
         schedules: [
             {
                 name: "Mon/Fri (Regular)",
@@ -134,14 +136,13 @@ class App extends Component {
                 ]
             }
         ]
-    }
-    ];
+    };
 
 
     mySchedule = ( props: any ) => {
         return (
           <Schedule 
-            schools={this.schools}
+            school={this.school}
             {...props}
           />
         );
@@ -150,7 +151,7 @@ class App extends Component {
       mainApp = ( props: any ) => {
         return (
           <Main 
-            schools={this.schools}
+            school={this.school}
             {...props}
           />
         );
