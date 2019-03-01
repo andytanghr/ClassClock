@@ -171,10 +171,10 @@ class Helpers {
         return -1
     }
 
-    static getScheduleForDay = (schedules: Schedule[], day: number) => {
+    static getScheduleForDay = (schedules: Schedule[], day: number, returnIndex=false) => {
         for (let i = 0; i < schedules.length; i++) {
           if (schedules[i].days.includes(day)) {
-            return schedules[i]
+            return returnIndex ? i : schedules[i]
           }
         }
         return null
