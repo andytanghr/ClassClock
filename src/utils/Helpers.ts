@@ -130,10 +130,10 @@ class Helpers {
      * @returns an index for looking up the current class period, or -1 if there is no class happening right now 
      */
     static getCurrentClassPeriodIndex = (currentSchedule:Schedule, currentDate:Date) => {
-        if (Helpers.isNoSchoolDay(currentSchedule)) {
-            //return immediately if there is no school today
-            return -1
-        }
+        // if (Helpers.isNoSchoolDay(currentSchedule)) {
+        //     //return immediately if there is no school today
+        //     return -1
+        // }
 
         //using for over forEach() because we are breaking out of the loop early
         for (let i = 0; i < currentSchedule.classes.length; i++) {
