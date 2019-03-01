@@ -137,7 +137,7 @@ class Helpers {
 
         //using for over forEach() because we are breaking out of the loop early
         for (let i = 0; i < currentSchedule.classes.length; i++) {
-            if (Helpers.checkClassTime(currentSchedule.classes[i], currentDate) === 0) {
+            if (Helpers.checkTimeRange(Helpers.getTimeObjectFromTime(currentDate), currentSchedule.classes[i].startTime, currentSchedule.classes[i].endTime) === 0) {
                 return i
             }
         }
@@ -242,10 +242,6 @@ class Helpers {
 
     static getTimeObjectFromTime = (currentDate:Date) => {
         return {hours: currentDate.getHours(), minutes: currentDate.getMinutes(), seconds: currentDate.getSeconds()}
-    }
-
-    static checkClassTime = (classPeriod:Period, currentDate:Date) => {
-        return Helpers.checkTimeRange(Helpers.getTimeObjectFromTime(currentDate), classPeriod.startTime, classPeriod.endTime)
     }
 
 }

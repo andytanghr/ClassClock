@@ -243,13 +243,13 @@ class Main extends Component<{school: School}, IndexState> {
             return -1
         }
 
-        
+        let classes = this.school.schedules[this.currentScheduleIndex].classes;
         //using for over forEach() because we are breaking out of the loop early
-        for (let i = 0; i < this.school.schedules[this.currentScheduleIndex].classes.length; i++) {
-            let classPeriodStatus = Helpers.checkClassTime(this.school.schedules[this.currentScheduleIndex].classes[i], this.currentDate)
+        for (let i = 0; i < classes.length; i++) {
+            let classPeriodStatus = Helpers.checkTimeRange(Helpers.getTimeObjectFromTime(this.currentDate), classes[i].startTime, classes[i].endTime)
             let nextClassPeriodStatus;
             if (i+1 < this.school.schedules[this.currentScheduleIndex].classes.length) {
-                nextClassPeriodStatus = Helpers.checkClassTime(this.school.schedules[this.currentScheduleIndex].classes[i+1], this.currentDate)
+                nextClassPeriodStatus = Helpers.checkTimeRange(Helpers.getTimeObjectFromTime(this.currentDate), classes[i+1].startTime, classes[i+1].endTime )
             }
 
             if (classPeriodStatus === -1) {
