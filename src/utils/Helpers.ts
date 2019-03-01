@@ -170,6 +170,15 @@ class Helpers {
         //if execution reaches here, no schedules were found for today, so it must be a no school day
         return -1
     }
+
+    static getScheduleForDay = (schedules: Schedule[], day: number) => {
+        for (let i = 0; i < schedules.length; i++) {
+          if (schedules[i].days.includes(day)) {
+            return schedules[i]
+          }
+        }
+        return null
+    }
     
     /**
      *  Gets a boolean value from HTML5 localStorage
