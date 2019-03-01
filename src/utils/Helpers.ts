@@ -179,7 +179,26 @@ class Helpers {
         }
         return null
     }
-    
+
+
+
+
+    static getClassPeriodForTime = (currentSchedule:Schedule, currentTime:Time, returnIndex=false) => {
+        if (currentSchedule == null) {
+            //return immediately if there is no school today
+            return null
+        }
+
+        //using for over forEach() because we are breaking out of the loop early
+        for (let i = 0; i < currentSchedule.classes.length; i++) {
+            if (Helpers.checkTimeRange(currentTime, currentSchedule.classes[i].startTime, currentSchedule.classes[i].endTime) === 0) {
+                return returnIndex ? i : currentSchedule.classes[i]
+            }
+        }
+        return null //no match found, there is no class currently in session
+    }
+
+
     /**
      *  Gets a boolean value from HTML5 localStorage
      *
