@@ -42,6 +42,9 @@ class Main extends Component<{school: School}, IndexState> {
         this.currentDate = new Date();
 
         // this.props.school = this.props.school;
+    }
+
+    componentDidMount() {
         this.update();
     }
 
