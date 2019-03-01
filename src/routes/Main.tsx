@@ -7,7 +7,6 @@ import { School, Time } from '../@types/scheduledata';
 interface IndexState {
     time?: string
     date?: any
-    scheduleInfoVis?: string
     schedule?: any
     viewScheduleLinkDispl?: string
     selectedSchoolDisplay?: any
@@ -29,7 +28,6 @@ class Main extends Component<{school: School}, IndexState> {
         this.state={
             time:'',
             date:'',
-            scheduleInfoVis: '',
             schedule: '',
             viewScheduleLinkDispl: '',
             selectedSchoolDisplay: '',
@@ -54,7 +52,6 @@ class Main extends Component<{school: School}, IndexState> {
     //nextClassPeriodIndex
 
     currentScheduleIndex = -1;
-    selectedSchoolIndex = 0;
 
 
     use24HourTime: boolean;
@@ -77,14 +74,9 @@ class Main extends Component<{school: School}, IndexState> {
         this.setState({date: this.getCurrentDateString()});
 
 
-        if (typeof this.selectedSchoolIndex !== 'undefined') {
-            this.updateVariables()
-            this.updateText();
-            this.setState({scheduleInfoVis: "visible"});
-            
-        } else {
-            this.setState({scheduleInfoVis: "hidden"});
-        }
+        this.updateVariables()
+        this.updateText();
+
         
         setTimeout(this.update, 500);
     }
