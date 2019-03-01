@@ -41,7 +41,7 @@ class Main extends Component<{school: School}, IndexState> {
         this.use24HourTime = Helpers.getLocalStorageBoolean("use24HourTime", false);
         this.currentDate = new Date();
 
-        this.school = this.props.school;
+        // this.props.school = this.props.school;
         this.update();
     }
 
@@ -58,7 +58,7 @@ class Main extends Component<{school: School}, IndexState> {
 
 
 
-    school: School;
+    // school: School;
 
 
 
@@ -90,8 +90,8 @@ class Main extends Component<{school: School}, IndexState> {
      * mostly useless method to update the currentScheduleIndex and currentClassPeriodIndex
      */
     updateVariables = () => {
-        this.currentScheduleIndex = Helpers.getCurrentScheduleIndex(this.school.schedules);
-        this.currentClassPeriodIndex = Helpers.getCurrentClassPeriodIndex(this.school.schedules[this.currentScheduleIndex], this.currentDate);
+        this.currentScheduleIndex = Helpers.getCurrentScheduleIndex(this.props.school.schedules);
+        this.currentClassPeriodIndex = Helpers.getCurrentClassPeriodIndex(this.props.school.schedules[this.currentScheduleIndex], this.currentDate);
     }
 
     /**
@@ -102,7 +102,7 @@ class Main extends Component<{school: School}, IndexState> {
         if (this.getCurrentTimeState() !== TimeStates.DAY_OFF ) {
 
             this.setState({schedule: ["You are viewing the ", <strong>{this.getCurrentScheduleName()}</strong>, " schedule"]});
-            this.setState({selectedSchoolDisplay: ["from ", <strong>{this.school.fullName}</strong> ,"."]});
+            this.setState({selectedSchoolDisplay: ["from ", <strong>{this.props.school.fullName}</strong> ,"."]});
 
             this.setState({viewScheduleLinkDispl: "block"});
         }
@@ -125,7 +125,7 @@ class Main extends Component<{school: School}, IndexState> {
 
             case TimeStates.OUTSIDE_SCHOOL_HOURS:
 
-                if(Helpers.compareTimes(Helpers.getTimeObjectFromTime(this.currentDate), this.school.schedules[this.currentScheduleIndex].classes[0].startTime) === -1) {
+                if(Helpers.compareTimes(Helpers.getTimeObjectFromTime(this.currentDate), this.props.school.schedules[this.currentScheduleIndex].classes[0].startTime) === -1) {
                     this.setState({countdownLabel: "School starts in: " });
                     this.setState({timeToEndOfClass: this.getTimeToStartOfSchoolString() });
                 } else {
@@ -141,13 +141,13 @@ class Main extends Component<{school: School}, IndexState> {
                 
 
             this.setState({nextClass: this.getClassName(this.getMostRecentlyStartedClassIndex()+1) });
-            this.setState({currentClass: this.school.passingPeriodName });
-            this.setState({timeToEndOfClass: Helpers.getTimeStringFromObject(this.getTimeTo(this.school.schedules[this.currentScheduleIndex].classes[this.getMostRecentlyStartedClassIndex()+1].startTime)) });
+            this.setState({currentClass: this.props.school.passingPeriodName });
+            this.setState({timeToEndOfClass: Helpers.getTimeStringFromObject(this.getTimeTo(this.props.school.schedules[this.currentScheduleIndex].classes[this.getMostRecentlyStartedClassIndex()+1].startTime)) });
                 break;
 
             case TimeStates.CLASS_IN_SESSION:
             this.setState({countdownLabel:  "...which ends in: " });
-            this.setState({timeToEndOfClass: Helpers.getTimeStringFromObject(this.getTimeTo(this.school.schedules[this.currentScheduleIndex].classes[Helpers.getCurrentClassPeriodIndex(this.school.schedules[this.currentScheduleIndex], this.currentDate)].endTime)) });
+            this.setState({timeToEndOfClass: Helpers.getTimeStringFromObject(this.getTimeTo(this.props.school.schedules[this.currentScheduleIndex].classes[Helpers.getCurrentClassPeriodIndex(this.props.school.schedules[this.currentScheduleIndex], this.currentDate)].endTime)) });
 
             this.setState({nextClass: this.getClassName(this.currentClassPeriodIndex+1) });
             this.setState({currentClass: this.getClassName(this.currentClassPeriodIndex) });
@@ -167,7 +167,7 @@ class Main extends Component<{school: School}, IndexState> {
     getCurrentTimeState = () => {
 
         //there is no schedule that applies today
-        if (Helpers.getCurrentScheduleIndex(this.school.schedules) <= -1) { return TimeStates.DAY_OFF }
+        if (Helpers.getCurrentScheduleIndex(this.props.school.schedules) <= -1) { return TimeStates.DAY_OFF }
 
         //it is a school day but it is not school hours
         else if (!this.schoolIsInSession()) { return TimeStates.OUTSIDE_SCHOOL_HOURS }
@@ -186,7 +186,7 @@ class Main extends Component<{school: School}, IndexState> {
      */
     getCurrentScheduleName = ():string => {
         if (!Helpers.isNoSchoolDay(this.currentScheduleIndex)) {
-            return this.school.schedules[this.currentScheduleIndex].name
+            return this.props.school.schedules[this.currentScheduleIndex].name
         } else { return "No School"}
     }
 
@@ -209,8 +209,8 @@ class Main extends Component<{school: School}, IndexState> {
 
         return Helpers.checkTimeRange(
             Helpers.getTimeObjectFromTime(this.currentDate),
-            this.school.schedules[this.currentScheduleIndex].classes[0].startTime,
-            this.school.schedules[this.currentScheduleIndex].classes[this.school.schedules[this.currentScheduleIndex].classes.length-1].endTime
+            this.props.school.schedules[this.currentScheduleIndex].classes[0].startTime,
+            this.props.school.schedules[this.currentScheduleIndex].classes[this.school.schedules[this.currentScheduleIndex].classes.length-1].endTime
             ) === 0
     }
 
@@ -243,12 +243,12 @@ class Main extends Component<{school: School}, IndexState> {
             return -1
         }
 
-        let classes = this.school.schedules[this.currentScheduleIndex].classes;
+        let classes = this.props.school.schedules[this.currentScheduleIndex].classes;
         //using for over forEach() because we are breaking out of the loop early
         for (let i = 0; i < classes.length; i++) {
             let classPeriodStatus = Helpers.checkTimeRange(Helpers.getTimeObjectFromTime(this.currentDate), classes[i].startTime, classes[i].endTime)
             let nextClassPeriodStatus;
-            if (i+1 < this.school.schedules[this.currentScheduleIndex].classes.length) {
+            if (i+1 < this.props.school.schedules[this.currentScheduleIndex].classes.length) {
                 nextClassPeriodStatus = Helpers.checkTimeRange(Helpers.getTimeObjectFromTime(this.currentDate), classes[i+1].startTime, classes[i+1].endTime )
             }
 
@@ -271,8 +271,8 @@ class Main extends Component<{school: School}, IndexState> {
      * @returns the time to the start of school as a string
      */
     getTimeToStartOfSchoolString = ():string => {
-        if (!this.classIsInSession() && !Helpers.isNoSchoolDay(this.currentScheduleIndex) && Helpers.compareTimes(Helpers.getTimeObjectFromTime(this.currentDate), this.school.schedules[this.currentScheduleIndex].classes[0].startTime) === -1) {
-            return Helpers.getTimeStringFromObject(this.getTimeTo(this.school.schedules[this.currentScheduleIndex].classes[0].startTime));
+        if (!this.classIsInSession() && !Helpers.isNoSchoolDay(this.currentScheduleIndex) && Helpers.compareTimes(Helpers.getTimeObjectFromTime(this.currentDate), this.props.school.schedules[this.currentScheduleIndex].classes[0].startTime) === -1) {
+            return Helpers.getTimeStringFromObject(this.getTimeTo(this.props.school.schedules[this.currentScheduleIndex].classes[0].startTime));
         } else {
             return "No Class"
         }
@@ -296,7 +296,7 @@ class Main extends Component<{school: School}, IndexState> {
      * @returns returns the class name for the given index or "No Class" if there is no class in session
      */
     getClassName = (index:number):string => {
-        var classes = this.school.schedules[this.currentScheduleIndex].classes;
+        var classes = this.props.school.schedules[this.currentScheduleIndex].classes;
         
         if (index >= 0 && index < classes.length) {
                 return classes[index].name.toString()
