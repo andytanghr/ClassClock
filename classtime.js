@@ -29,8 +29,8 @@ var schools = [
         //order is as is on the school website, although it doesnt matter.
         schedules: [
             {
-                name: "Mon/Thurs/Fri (Regular)",
-                days: [1, 4, 5],
+                name: "Mon/Thurs (Regular)",
+                days: [1, 4],
                 classes: [
                     {
                         name: "1st Period",
@@ -65,44 +65,106 @@ var schools = [
                 ]
             },
             {
-                name: "Tues/Wed (Support Seminar)",
-                days: [2, 3],
+                name: "8-period Day",
+                days: [5],
                 classes: [
                     {
                         name: "1st Period",
                         startTime: {hours: 8, minutes:25},
-                        endTime: {hours: 9, minutes:47}
+                        endTime: {hours: 9, minutes:07}
                     },
                     {
-                        name: "TSCT",
-                        startTime: {hours: 9, minutes:47},
-                        endTime: {hours: 9, minutes:57}
-                    },
-                    {
-                        name: "Support Seminar",
-                        startTime: {hours: 10, minutes:02},
-                        endTime: {hours: 10, minutes:34}
+                        name: "Passing Period",
+                        showInFullSchedule: false,
+                        startTime: {hours: 9, minutes:07},
+                        endTime: {hours: 9, minutes:12}
                     },
                     {
                         name: "2nd Period",
-                        startTime: {hours: 10, minutes:39},
-                        endTime: {hours: 12, minutes:01}
+                        startTime: {hours: 9, minutes:12},
+                        endTime: {hours: 9, minutes:54}
                     },
                     {
-                        name: "Lunch",
-                        startTime: {hours: 12, minutes:01},
-                        endTime: {hours: 12, minutes:36}
+                        name: "TSCT",
+                        startTime: {hours: 9, minutes:54},
+                        endTime: {hours: 10, minutes:09}
+                    },
+                    {
+                        name: "Passing Period",
+                        showInFullSchedule: false,
+                        startTime: {hours: 10, minutes:09},
+                        endTime: {hours: 10, minutes:14}
                     },
                     {
                         name: "3rd Period",
-                        startTime: {hours: 12, minutes:41},
-                        endTime: {hours: 14, minutes:03}
+                        startTime: {hours: 10, minutes:14},
+                        endTime: {hours: 10, minutes:56}
+                    },
+                    {
+                        name: "Passing Period",
+                        showInFullSchedule: false,
+                        startTime: {hours: 10, minutes:56},
+                        endTime: {hours: 11, minutes:01}
                     },
                     {
                         name: "4th Period",
-                        startTime: {hours: 14, minutes:8},
+                        startTime: {hours: 11, minutes:01},
+                        endTime: {hours: 11, minutes:43}
+                    },
+                    {
+                        name: "Lunch",
+                        startTime: {hours: 11, minutes:43},
+                        endTime: {hours: 12, minutes:18}
+                    },
+                    {
+                        name: "Passing Period",
+                        showInFullSchedule: false,
+                        startTime: {hours: 12, minutes:18},
+                        endTime: {hours: 12, minutes:23}
+                    },
+                    {
+                        name: "5th Period",
+                        startTime: {hours: 12, minutes:23},
+                        endTime: {hours: 13, minutes:05}
+                    },
+                    {
+                        name: "Passing Period",
+                        showInFullSchedule: false,
+                        startTime: {hours: 13, minutes:05},
+                        endTime: {hours: 13, minutes:10}
+                    },
+                    {
+                        name: "6th Period",
+                        startTime: {hours: 13, minutes:10},
+                        endTime: {hours: 13, minutes:52}
+                    },
+                    {
+                        name: "Short Break",
+                        startTime: {hours: 13, minutes:52},
+                        endTime: {hours: 13, minutes:56}
+                    },
+                    {
+                        name: "Passing Period",
+                        showInFullSchedule: false,
+                        startTime: {hours: 13, minutes:56},
+                        endTime: {hours: 14, minutes:01}
+                    },
+                    {
+                        name: "7th Period",
+                        startTime: {hours: 14, minutes:01},
+                        endTime: {hours: 14, minutes:43}
+                    },
+                    {
+                        name: "Passing Period",
+                        showInFullSchedule: false,
+                        startTime: {hours: 14, minutes:43},
+                        endTime: {hours: 14, minutes:48}
+                    },
+                    {
+                        name: "8th Period",
+                        startTime: {hours: 14, minutes:48},
                         endTime: {hours: 15, minutes:30}
-                    }
+                    },
                 ],
             }
         ]
