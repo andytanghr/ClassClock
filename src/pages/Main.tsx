@@ -1,12 +1,7 @@
 import React, { Component } from 'react'
 import moment, { Moment } from 'moment'
-import {
-  Container,
-  Time as TimeLabel,
-  NavButton,
-  Title,
-  Content
-} from './Main.styles'
+import { Time as TimeLabel, NavButton, Title, Content } from './Main.styles'
+import { Container } from './Styles'
 import { School, Schedule, Period } from '../@types/scheduleData'
 
 interface Props {
@@ -28,6 +23,7 @@ class Main extends Component<Props> {
     return (
       <Container>
         <div>
+          <br />
           <Title>It is currently: </Title>
           <TimeLabel style={{ margin: 0 }}>
             {this.props.time.format('h:mm:ss A')}

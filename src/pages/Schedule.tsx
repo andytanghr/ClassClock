@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import { School, Schedule } from '../@types/scheduleData'
 import moment from 'moment'
 
+import { Container } from './Styles'
+import { TableRow } from './Schedule.styles'
+
 interface Props {
   school: School
   schedule?: Schedule
@@ -28,10 +31,10 @@ export default class SchedulePage extends Component<Props> {
 
       return (
         <tr>
-          <td>{classPeriod.name}</td>
-          <td>{`${start.format(formatString)} - ${end.format(
-            formatString
-          )}`}</td>
+          <TableRow style={{ fontWeight: 'bold' }}>{classPeriod.name}</TableRow>
+          <TableRow>{`
+            ${start.format(formatString)} - ${end.format(formatString)}
+          `}</TableRow>
         </tr>
       )
     })
@@ -39,21 +42,18 @@ export default class SchedulePage extends Component<Props> {
 
   render () {
     return (
-      <div className='App'>
-        <a className='navbutton' href='/'>
-          <i className='fas fa-home' />
-        </a>
+      <Container>
+        <div>
+          <h1>{this.props.school.fullName}</h1>
+          <h3>
+            {this.props.schedule && this.props.schedule.name + ' schedule'}
+          </h3>
 
-        <br />
-
-        <h1 className='centered topSpace bottomSpace' id='schoolName'>
-          {this.props.school.fullName}
-        </h1>
-
-        <table id='scheduleTable' className='centeredInline topSpace'>
-          <tbody>{this.renderSchedule()}</tbody>
-        </table>
-      </div>
+          <table style={{ margin: '1em auto' }}>
+            <tbody>{this.renderSchedule()}</tbody>
+          </table>
+        </div>
+      </Container>
     )
   }
 }
