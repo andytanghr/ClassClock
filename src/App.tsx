@@ -1,174 +1,107 @@
-import React, { Component } from 'react';
-import { BrowserRouter as Router, Route } from "react-router-dom";
-import './App.css';
-import Main from './routes/Main';
-import Settings from './routes/Settings';
-import Schedule from './routes/Schedule';
-import { School } from './@types/scheduledata';
+import React, { Component } from 'react'
+import moment, { Moment } from 'moment'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
+import MainPage from './pages/Main'
+import SettingsPage from './pages/Settings'
+import SchedulePage from './pages/Schedule'
 
-class App extends Component {
+import { getSchedule, getUpcomingClasses } from './utils/Helpers'
+import { lohs } from './data/schools'
+import { School, Period, Schedule } from './@types/scheduleData'
 
-    // constructor() {
-    //     super();
+import './App.css'
 
-
-    // }
-
-    school: School =
-        {
-        fullName: "Lake Oswego High School",
-        shortName: "LOHS",
-        passingPeriodName: "Passing Period", //the name to use for time gaps in the schedule between classes
-        //order is as is on the school website, although it doesnt matter.
-        timeZone:"",
-        schedules: [
-            {
-                name: "Mon/Fri (Regular)",
-                days: [1, 5],
-                classes: [
-                    {
-                        name: "1st Period",
-                        startTime: {hours: 8, minutes:25},
-                        endTime: {hours: 9, minutes:55}
-                    },
-                    {
-                        name: "TSCT",
-                        startTime: {hours: 9, minutes:55},
-                        endTime: {hours: 10, minutes:10}
-                    },
-                    {
-                        name: "2nd Period",
-                        startTime: {hours: 10, minutes:15},
-                        endTime: {hours: 11, minutes:45}
-                    },
-                    {
-                        name: "Lunch",
-                        startTime: {hours: 11, minutes:45},
-                        endTime: {hours: 12, minutes:20}
-                    },
-                    {
-                        name: "3rd Period",
-                        startTime: {hours: 12, minutes:25},
-                        endTime: {hours: 13, minutes:55}
-                    },
-                    {
-                        name: "4th Period",
-                        startTime: {hours: 14, minutes:0},
-                        endTime: {hours: 15, minutes:30}
-                    }
-                ]
-            },
-            {
-                name: "Tues/Wed (Support Seminar)",
-                days: [2, 3],
-                classes: [
-                    {
-                        name: "1st Period",
-                        startTime: {hours: 8, minutes:25},
-                        endTime: {hours: 9, minutes:47}
-                    },
-                    {
-                        name: "TSCT",
-                        startTime: {hours: 9, minutes:47},
-                        endTime: {hours: 9, minutes:57}
-                    },
-                    {
-                        name: "Support Seminar",
-                        startTime: {hours: 10, minutes:2},
-                        endTime: {hours: 10, minutes:34}
-                    },
-                    {
-                        name: "2nd Period",
-                        startTime: {hours: 10, minutes:39},
-                        endTime: {hours: 12, minutes:1}
-                    },
-                    {
-                        name: "Lunch",
-                        startTime: {hours: 12, minutes:1},
-                        endTime: {hours: 12, minutes:36}
-                    },
-                    {
-                        name: "3rd Period",
-                        startTime: {hours: 12, minutes:41},
-                        endTime: {hours: 14, minutes:3}
-                    },
-                    {
-                        name: "4th Period",
-                        startTime: {hours: 14, minutes:8},
-                        endTime: {hours: 15, minutes:30}
-                    }
-                ],
-            },
-            {
-                name: "Thursday (Early Release)",
-                days: [4],
-                classes: [
-                    {
-                        name: "1st Period",
-                        startTime: {hours: 8, minutes:25},
-                        endTime: {hours: 9, minutes:50}
-                    },
-                    {
-                        name: "TSCT",
-                        startTime: {hours: 9, minutes:50},
-                        endTime: {hours: 10, minutes:0}
-                    },
-                    {
-                        name: "2nd Period",
-                        startTime: {hours: 10, minutes:5},
-                        endTime: {hours: 11, minutes:30}
-                    },
-                    {
-                        name: "Lunch",
-                        startTime: {hours: 11, minutes:30},
-                        endTime: {hours: 12, minutes:5}
-                    },
-                    {
-                        name: "3rd Period",
-                        startTime: {hours: 12, minutes:10},
-                        endTime: {hours: 13, minutes:35}
-                    },
-                    {
-                        name: "4th Period",
-                        startTime: {hours: 13, minutes:40},
-                        endTime: {hours: 15, minutes:5}
-                    }
-                ]
-            }
-        ]
-    };
-
-
-    mySchedule = ( props: any ) => {
-        return (
-          <Schedule 
-            school={this.school}
-            {...props}
-          />
-        );
-      }
-
-      mainApp = ( props: any ) => {
-        return (
-          <Main 
-            school={this.school}
-            {...props}
-          />
-        );
-      }
-
-    render() {
-        return (
-            <Router>
-                <div>
-                    <Route exact path="/" render={this.mainApp} />
-                    <Route path="/schedule" render={this.mySchedule} />
-                    <Route path="/settings" component={Settings} />
-                </div>
-            </Router>
-        );
-    }
+interface State {
+  school: School
+  time: Moment
+  schedule?: Schedule
+  nextClass?: Period
+  currentClass?: Period
 }
 
-export default App;
-        
+class App extends Component<{}, State> {
+  state = {
+    school: lohs,
+    time: moment(),
+    schedule: undefined,
+    currentClass: undefined,
+    nextClass: undefined
+  }
+
+  updateTimer = 0
+
+  componentDidMount () {
+    this.update()
+    // this.updateTimer = window.setInterval(this.update, 1000)
+  }
+
+  update = () => {
+    let time = moment()
+    let schedule
+
+    schedule = getSchedule(this.state.school.schedules, time.isoWeekday())
+    if (schedule === undefined) {
+      this.setState({
+        time: moment()
+      })
+
+      return
+    }
+
+    let classes = getUpcomingClasses(schedule, time)
+    let currentClass = classes && classes.currentClass
+    let nextClass = classes && classes.nextClass
+
+    this.setState({
+      time: moment(),
+      currentClass,
+      nextClass,
+      schedule
+    })
+  }
+
+  render () {
+    return (
+      <Router>
+        <div>
+          <Route
+            exact
+            path='/'
+            component={() => {
+              return (
+                <MainPage
+                  school={this.state.school}
+                  time={this.state.time}
+                  currentClass={this.state.currentClass}
+                  nextClass={this.state.nextClass}
+                  schedule={this.state.schedule}
+                  use24Hr={false}
+                />
+              )
+            }}
+          />
+          <Route
+            path='/schedule'
+            component={() => {
+              return (
+                <SchedulePage
+                  school={this.state.school}
+                  schedule={this.state.schedule}
+                  use24Hr={false}
+                />
+              )
+            }}
+          />
+          <Route
+            path='/settings'
+            component={() => {
+              return <SettingsPage />
+            }}
+          />
+        </div>
+      </Router>
+    )
+  }
+}
+
+export default App
