@@ -32,7 +32,7 @@ class App extends Component<{}, State> {
 
   componentDidMount () {
     this.update()
-    // this.updateTimer = window.setInterval(this.update, 1000)
+    this.updateTimer = window.setInterval(this.update, 1000)
   }
 
   update = () => {
